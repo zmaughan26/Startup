@@ -29,9 +29,9 @@ sequenceDiagram
 
 ### Key features
 
-- Describe your key feature
-- Describe your key feature
-- Describe your key feature
+- Add assignment button that prompts you to enter assignment name, due date, est. time, etc.
+- Filter that fitlers based on assignment name, due date, est. time, etc.
+- Completion button where you can see and track everything you have accomplished
 
 ### Technologies
 
