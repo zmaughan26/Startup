@@ -37,12 +37,12 @@ sequenceDiagram
 
 I am going to use the required technologies in the following ways.
 
-- **HTML** - Description here
-- **CSS** - Description here
-- **React** - Description here
-- **Service** - Description here
-- **DB/Login** - Description here
-- **WebSocket** - Description here
+- **HTML** - Core stuctural elements and text layout of the app
+- **CSS** - style and format the interface, colorcoding for classes and assignment due dates
+- **React** - updates the page to make changes when a user interacts like making a new assignment
+- **Service** - receive and handle requests from the client, does operations like getting students assignments list
+- **DB/Login** - manage and control user authitcation
+- **WebSocket** - creates real time interation between the user and the app
 
 ## 🚀 Specification Deliverable
 
