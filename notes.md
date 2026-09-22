@@ -13,11 +13,11 @@ This file represents what I have learned about web programming.
 
 ## AWS
 
-Interesting things I have learned about AWS
+Its honestly not super hard to make a website just takes the right steps
 
 ## HTML
 
-Interesting things I have learned about HTML
+html is just the stucture and the pretty stuff comes later
 
 ## React
 
