@@ -29,8 +29,14 @@
         User:
         <span class="users">Student Name</span>
       </div>
-      <table class="assignment-table">
-        <caption>Upcoming Assignments</caption>
+      <div class="assignment-table-toolbar">
+        <h2 id="upcoming-heading">Upcoming Assignments</h2>
+        <label class="assignment-filter" for="assignment-filter">
+          Filter
+          <input id="assignment-filter" type="search" aria-controls="upcoming-assignment-table" placeholder="Name or due date" />
+        </label>
+      </div>
+      <table class="assignment-table" id="upcoming-assignment-table" aria-labelledby="upcoming-heading">
         <thead>
           <tr>
             <th scope="col">Assignment</th>
@@ -56,6 +62,7 @@
           </tr>
         </tbody>
       </table>
+      <p class="assignment-filter-empty" id="assignment-filter-empty" hidden>No assignments match that filter.</p>
 
       <div class="assignment-actions">
         <button class="assignment-action-button" type="submit">Add Assignment</button>
@@ -75,5 +82,23 @@
       <a href="https://github.com/zmaughan26/studytrack-html"
       >GitHub</a>
     </footer>
+    <script>
+      const assignmentFilter = document.getElementById("assignment-filter");
+      const assignmentRows = document.querySelectorAll("#upcoming-assignment-table tbody tr");
+      const emptyFilterMessage = document.getElementById("assignment-filter-empty");
+
+      assignmentFilter.addEventListener("input", () => {
+        const query = assignmentFilter.value.trim().toLocaleLowerCase();
+        let visibleRows = 0;
+
+        assignmentRows.forEach((row) => {
+          const matches = row.textContent.toLocaleLowerCase().includes(query);
+          row.hidden = !matches;
+          visibleRows += matches ? 1 : 0;
+        });
+
+        emptyFilterMessage.hidden = visibleRows > 0;
+      });
+    </script>
   </body>
 </html>
