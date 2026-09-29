@@ -118,6 +118,21 @@ main h1 {
 	color: #12345a;
 }
 
+.assignment-checkbox-heading,
+.assignment-checkbox-cell {
+	width: 64px;
+	text-align: center;
+}
+
+.assignment-checkbox {
+	width: 18px;
+	height: 18px;
+	margin: 0;
+	accent-color: #276738;
+	vertical-align: middle;
+	cursor: pointer;
+}
+
 .completed-table tbody tr {
 	background: #e8f5e9;
 }
