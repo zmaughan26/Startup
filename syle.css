@@ -45,11 +45,15 @@ header hr {
 	text-decoration: none;
 	font-size: 14px;
 	font-weight: 600;
+	outline: 1px solid transparent;
+	outline-offset: -3px;
+	transition: background-color 140ms ease, outline-color 140ms ease;
 }
 
 .header-nav a:hover,
 .header-nav a:focus-visible {
 	background: rgba(255, 255, 255, 0.16);
+	outline-color: rgba(255, 255, 255, 0.7);
 }
 
 .header-nav .nav-logout {
