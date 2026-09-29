@@ -57,7 +57,7 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 - [x] **Rented EC2 server** - just followed the directions
 - [x] **Leased domain name** - got my domain name
-- [x] **Server accessible** from my domain: [https://starup.assignmentsort.click]
+- [x] **Server accessible** from my domain: [https://startup.assignmentsort.click]
 
 ## 🚀 HTML deliverable
 
