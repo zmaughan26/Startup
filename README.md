@@ -83,7 +83,7 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 - [x] **Use of a CSS framework** - used them throughout
 - [x] **All visual elements styled using CSS** - I styled the html using CSS
 - [x] **Responsive to window resizing using flexbox and/or grid display** - It is responsvie to window resizing
-- [ ] **Use of a imported font** - Idk where to import from... anywhere?
+- [x] **Use of a imported font** - imported from google
 - [x] **Use of different types of selectors including element, class, ID, and pseudo selectors** - I completed this
 
 ## 🚀 React part 1: Routing deliverable
