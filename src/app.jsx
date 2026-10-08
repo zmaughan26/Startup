@@ -2,48 +2,56 @@ import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import './app.css';
 
-import { BrowserRouter as Router, Routes, Route, BrowserRouter } from "react-router-dom";
+import { BrowserRouter, Routes, Route, NavLink } from "react-router-dom";
 import { Login } from "./login/login.jsx";
-import { About } from "./about/about.jsx";
-import { Completed } from "./completed/completed.jsx";
+import { Info } from "./about/about.jsx";
+import { Complete } from "./completed/completed.jsx";
 import { MyAssignments } from "./myassignments/myassignments.jsx";
 
 
 export default function App() {
-    return 
+  return (
     <BrowserRouter>
-    <div className= 'body bg-dark text-light'><head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>StudyTrack</title>
-    <link rel="icon" href="studytrack-favicon.svg" />
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="syle.css" />
-  </head>
-    <header class="site-header">
-      <h1>StudyTrack<sup>&reg;</sup></h1>
+      <div className="body bg-dark text-light">
+        <header className="site-header">
+          <h1>StudyTrack<sup>&reg;</sup></h1>
+          <nav className="header-nav" aria-label="Main navigation">
+            <ul>
+              <li><NavLink to="/login">Login</NavLink></li>
+              <li><NavLink to="/myassignments">My Assignments</NavLink></li>
+              <li><NavLink to="/completed">Completed Assignments</NavLink></li>
+              <li><NavLink to="/about">About</NavLink></li>
+              <li className="nav-logout"><NavLink to="/"></NavLink></li>
+            </ul>
+          </nav>
+        </header>
 
-      <nav class="header-nav" aria-label="Main navigation">
-        <ul>
-          <li><a href="index.html">Home</a></li>
-          <li><a href="myassignments.html">My Assignments</a></li>
-          <li><a href="completed.html">Completed Assignments</a></li>
-          <li><a href="about.html">About</a></li>
-          <li className="nav-logout"><a href="index.html">Log out</a></li>
-        </ul>
-      </nav>
+        <main>
+          <Routes>
+            <Route path="/" element={<Login />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/about" element={<Info />} />
+            <Route path="/completed" element={<Complete />} />
+            <Route path="/myassignments" element={<MyAssignments />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </main>
 
-    </header>
-    <main>
-        <h2>App Components go here</h2>
-    </main>
-     <footer>
-      <hr />
-      <span class="text-reset">Author Name: Zach Maughan</span>
-      <br />
-      <a href="https://github.com/zmaughan26/studytrack-html"
-      >GitHub</a>
-    </footer> 
-      </div>; 
+        <footer>
+          <hr />
+          <span className="text-reset">Author Name: Zach Maughan</span>
+          <br />
+          <a href="https://github.com/zmaughan26/studytrack-html">GitHub</a>
+        </footer>
+      </div>
     </BrowserRouter>
+  );
+}
+
+function NotFound() {
+    return (
+        <main className="notfound-container">
+            <div> 404: Return to sender. Address not found. </div>
+        </main>
+    );
 }
