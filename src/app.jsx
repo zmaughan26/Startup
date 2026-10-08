@@ -21,7 +21,6 @@ export default function App() {
               <li><NavLink to="/myassignments">My Assignments</NavLink></li>
               <li><NavLink to="/completed">Completed Assignments</NavLink></li>
               <li><NavLink to="/about">About</NavLink></li>
-              <li className="nav-logout"><NavLink to="/"></NavLink></li>
             </ul>
           </nav>
         </header>
