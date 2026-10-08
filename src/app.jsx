@@ -12,7 +12,7 @@ import { MyAssignments } from "./myassignments/myassignments.jsx";
 export default function App() {
   return (
     <BrowserRouter>
-      <div className="body bg-dark text-light">
+      <div className="body">
         <header className="site-header">
           <h1>StudyTrack<sup>&reg;</sup></h1>
           <nav className="header-nav" aria-label="Main navigation">
