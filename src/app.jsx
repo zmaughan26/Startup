@@ -2,8 +2,17 @@ import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import './app.css';
 
+import { BrowserRouter as Router, Routes, Route, BrowserRouter } from "react-router-dom";
+import { Login } from "./login/login.jsx";
+import { About } from "./about/about.jsx";
+import { Completed } from "./completed/completed.jsx";
+import { MyAssignments } from "./myassignments/myassignments.jsx";
+
+
 export default function App() {
-    return <div className= 'body bg-dark text-light'><head>
+    return 
+    <BrowserRouter>
+    <div className= 'body bg-dark text-light'><head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>StudyTrack</title>
@@ -34,5 +43,7 @@ export default function App() {
       <br />
       <a href="https://github.com/zmaughan26/studytrack-html"
       >GitHub</a>
-    </footer>   </div>;
+    </footer> 
+      </div>; 
+    </BrowserRouter>
 }
