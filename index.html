@@ -2,45 +2,13 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <!-- Tell browsers not to scale the viewport automatically -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Simon HTML</title>
-    <link rel="icon" href="studytrack-favicon.svg" />
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="syle.css" />
+    <title>StudyTrack</title>
+    <link rel="icon" href="/studytrack-favicon.svg" />
   </head>
   <body>
-    <!-- Use header, main, and footer elements to give semantic structure -->
-    <header>
-      <h1>StudyTrack<sup>&reg;</sup></h1>
-
-  
-    
-      <!-- Since we don't have the ability to style we use old style HTML to give some visual formatting -->
-      <hr />
-    </header>
-
-    <main>
-      <h1>Welcome to StudyTrack</h1>
-      <form class="login-box" method="get" action="myassignments.html">
-        <div>
-          <span>@</span>
-          <input type="text" placeholder="Username" />
-        </div>
-        <div>
-          <span>🔒</span>
-          <input type="password" placeholder="password" />
-        </div>
-        <button class="rounded-md bg-[#12345a] px-5 py-2.5 font-semibold text-white shadow-sm transition hover:-translate-y-px hover:bg-[#1b4a78] hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f4b942]" type="submit">Login</button>
-        <button class="rounded-md border border-[#12345a] bg-white px-5 py-2.5 font-semibold text-[#12345a] transition hover:bg-[#e8f0f8] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f4b942]" type="submit">Create</button>
-      </form>
-    </main>
-
-    <footer>
-      <hr />
-      <span class="text-reset">Author Name: Zach Maughan</span>
-      <br />
-      <a href="https://github.com/zmaughan26/studytrack-html">GitHub</a>
-    </footer>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    <script type="module" src="./index.jsx"></script>
   </body>
 </html>
