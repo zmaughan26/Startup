@@ -3,7 +3,7 @@ import React from "react";
 export function Complete () {
     return (
        <main>
-      <table class="assignment-table completed-table">
+      <table className="assignment-table completed-table">
         <caption>Completed Assignments</caption>
         <thead>
           <tr>
