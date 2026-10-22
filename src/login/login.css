@@ -1,0 +1,18 @@
+.login-submit {
+	padding: 10px 20px;
+	border: 0;
+	border-radius: 6px;
+	background: #12345a;
+	color: #fff;
+	font-weight: 600;
+	cursor: pointer;
+}
+
+.login-submit:hover {
+	background: #1b4a78;
+}
+
+.login-submit:focus-visible {
+	outline: 3px solid #f4b942;
+	outline-offset: 2px;
+}

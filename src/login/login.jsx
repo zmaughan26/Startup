@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import "./login.css";
 
 export function Login() {
   const navigate = useNavigate();
@@ -11,18 +12,21 @@ export function Login() {
         className="login-box"
         onSubmit={(event) => {
           event.preventDefault();
+          const formData = new FormData(event.currentTarget);
+          localStorage.setItem("username", formData.get("username"));
+          localStorage.setItem("password", formData.get("password"));
           navigate("/myassignments");
         }}
       >
         <div>
           <span>@</span>
-          <input type="text" placeholder="Username" />
+          <input type="text" name="username" placeholder="Username" required />
         </div>
         <div>
           <span>🔒</span>
-          <input type="password" placeholder="Password" />
+          <input type="password" name="password" placeholder="Password" required />
         </div>
-        <button className="rounded-md bg-[#12345a] px-5 py-2.5 font-semibold text-white" type="submit">
+        <button className="login-submit" type="submit">
           Login
         </button>
         <button className="rounded-md border border-[#12345a] bg-white px-5 py-2.5" type="button">
