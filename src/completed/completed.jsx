@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "./completed.css";
 
 export function Complete () {
+    const username = localStorage.getItem("username") || "Guest";
     const [completedAssignments, setCompletedAssignments] = useState(() => {
       const savedAssignments = localStorage.getItem("studytrack.completedAssignments");
       return savedAssignments ? JSON.parse(savedAssignments) : [];
@@ -32,6 +33,9 @@ export function Complete () {
 
     return (
        <main>
+      <div className="users">
+        User: <span className="users">{username}</span>
+      </div>
       <table className="assignment-table completed-table">
         <caption>Completed Assignments</caption>
         <thead>
