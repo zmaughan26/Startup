@@ -6,6 +6,11 @@ export function MyAssignments() {
   const [newAssignmentName, setNewAssignmentName] = useState("");
   const [newAssignmentClass, setNewAssignmentClass] = useState("");
   const [newAssignmentDueDate, setNewAssignmentDueDate] = useState("");
+  const [filter, setFilter] = useState("");
+  const filteredAssignments = assignments.filter((assignment) => {
+    const searchText = `${assignment.name} ${assignment.className} ${assignment.dueDate}`.toLowerCase();
+    return searchText.includes(filter.trim().toLowerCase());
+  });
 
   function addAssignment(event) {
     event.preventDefault();
@@ -45,6 +50,8 @@ export function MyAssignments() {
             type="search"
             aria-controls="upcoming-assignment-table"
             placeholder="Assignment, class, or date"
+            value={filter}
+            onChange={(event) => setFilter(event.target.value)}
           />
         </label>
       </div>
@@ -63,7 +70,7 @@ export function MyAssignments() {
           </tr>
         </thead>
         <tbody>
-          {assignments.map((assignment) => {
+          {filteredAssignments.map((assignment) => {
             const dueDateLabel = new Date(`${assignment.dueDate}T00:00:00`).toLocaleDateString(
               "en-US",
               { month: "long", day: "numeric", year: "numeric" }
@@ -125,7 +132,11 @@ export function MyAssignments() {
           })}
         </tbody>
       </table>
-      <p className="assignment-filter-empty" id="assignment-filter-empty" hidden>
+      <p
+        className="assignment-filter-empty"
+        id="assignment-filter-empty"
+        hidden={!filter.trim() || filteredAssignments.length > 0}
+      >
         No assignments match that filter.
       </p>
 
