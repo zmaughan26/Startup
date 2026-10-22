@@ -206,13 +206,31 @@ export function MyAssignments() {
                     checked={assignment.completed}
                     aria-label={`Mark ${assignment.name} complete`}
                     onChange={(event) => {
-                      setAssignments((currentAssignments) =>
-                        currentAssignments.map((currentAssignment) =>
-                          currentAssignment.id === assignment.id
-                            ? { ...currentAssignment, completed: event.target.checked }
-                            : currentAssignment
-                        )
-                      );
+                      if (event.target.checked) {
+                        const completedAssignments = JSON.parse(
+                          localStorage.getItem("studytrack.completedAssignments") || "[]"
+                        );
+                        localStorage.setItem(
+                          "studytrack.completedAssignments",
+                          JSON.stringify([
+                            ...completedAssignments,
+                            { ...assignment, completed: true, completedOn: new Date().toLocaleDateString() },
+                          ])
+                        );
+                        setAssignments((currentAssignments) =>
+                          currentAssignments.filter(
+                            (currentAssignment) => currentAssignment.id !== assignment.id
+                          )
+                        );
+                      } else {
+                        setAssignments((currentAssignments) =>
+                          currentAssignments.map((currentAssignment) =>
+                            currentAssignment.id === assignment.id
+                              ? { ...currentAssignment, completed: false }
+                              : currentAssignment
+                          )
+                        );
+                      }
                     }}
                   />
                 </td>

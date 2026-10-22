@@ -1,6 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 
 export function Complete () {
+    const [completedAssignments] = useState(() => {
+      const savedAssignments = localStorage.getItem("studytrack.completedAssignments");
+      return savedAssignments ? JSON.parse(savedAssignments) : [];
+    });
+
     return (
        <main>
       <table className="assignment-table completed-table">
@@ -14,26 +19,17 @@ export function Complete () {
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>Complete</td>
-            <td>Calc HW 1.7</td>
-            <td>Calculus</td>
-            <td>May 20, 2023</td>
-          </tr>
-          <tr>
-            <td>Complete</td>
-            <td>Read Chapter 4</td>
-            <td>History</td>
-            <td>June 2, 2023</td>
-          </tr>
-          <tr>
-            <td>Complete</td>
-            <td>Write Reflection</td>
-            <td>English</td>
-            <td>July 3, 2023</td>
-          </tr>
+          {completedAssignments.map((assignment) => (
+            <tr key={assignment.id}>
+              <td>Complete</td>
+              <td>{assignment.name}</td>
+              <td>{assignment.className}</td>
+              <td>{assignment.completedOn}</td>
+            </tr>
+          ))}
         </tbody>
       </table>
+      {completedAssignments.length === 0 && <p>No completed assignments yet.</p>}
     </main>
     );
 }
