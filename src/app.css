@@ -230,34 +230,6 @@ main h1 {
 	text-align: center;
 }
 
-.assignment-edit-heading,
-.assignment-edit-cell {
-	width: 130px;
-	text-align: center;
-}
-
-.assignment-edit-cell {
-	white-space: nowrap;
-}
-
-.assignment-delete-button {
-	margin-left: 4px;
-	border: 0;
-	background: transparent;
-	cursor: pointer;
-}
-
-.assignment-edit-button svg,
-.assignment-delete-button svg {
-	width: 17px;
-	height: 17px;
-	fill: none;
-	stroke: currentColor;
-	stroke-linecap: round;
-	stroke-linejoin: round;
-	stroke-width: 2;
-}
-
 .assignment-row-input {
 	box-sizing: border-box;
 	width: 100%;

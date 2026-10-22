@@ -1,0 +1,64 @@
+.assignment-edit-heading,
+.assignment-edit-cell {
+	width: 116px;
+	text-align: center;
+}
+
+.assignment-edit-cell {
+	white-space: nowrap;
+}
+
+.assignment-icon-button {
+	display: inline-grid;
+	width: 34px;
+	height: 34px;
+	place-items: center;
+	padding: 0;
+	border: 1px solid #d4dce6;
+	border-radius: 8px;
+	background: #fff;
+	cursor: pointer;
+	transition: background-color 140ms ease, border-color 140ms ease, transform 140ms ease;
+	vertical-align: middle;
+}
+
+.assignment-icon-button + .assignment-icon-button {
+	margin-left: 6px;
+}
+
+.assignment-icon-button:hover {
+	transform: translateY(-1px);
+}
+
+.assignment-icon-button:focus-visible {
+	outline: 3px solid #f4b942;
+	outline-offset: 2px;
+}
+
+.assignment-icon-button svg {
+	width: 17px;
+	height: 17px;
+	fill: none;
+	stroke: currentColor;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+	stroke-width: 2;
+}
+
+.assignment-edit-button {
+	color: #12345a;
+}
+
+.assignment-edit-button:hover {
+	border-color: #b8cce0;
+	background: #e8f0f8;
+}
+
+.assignment-delete-button {
+	color: #a12622;
+}
+
+.assignment-delete-button:hover {
+	border-color: #efc1bd;
+	background: #fbe9e7;
+}

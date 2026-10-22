@@ -1,11 +1,8 @@
 import React, { useState } from "react";
+import "./myassignments.css";
 
 export function MyAssignments() {
-  const [assignments, setAssignments] = useState([
-    { id: 1, name: "CALC HW 2.1", className: "Calculus", dueDate: "2023-05-15", completed: false },
-    { id: 2, name: "Read Chapter 5", className: "History", dueDate: "2023-05-20", completed: false },
-    { id: 3, name: "Write Reflection", className: "English", dueDate: "2023-05-25", completed: false },
-  ]);
+  const [assignments, setAssignments] = useState([]);
   const [newAssignmentName, setNewAssignmentName] = useState("");
   const [newAssignmentDueDate, setNewAssignmentDueDate] = useState("");
 
@@ -78,11 +75,11 @@ export function MyAssignments() {
                 data-due-date-label={dueDateLabel}
               >
                 <td className="assignment-edit-cell">
-                  <button className="assignment-edit-button grid h-8 w-8 place-items-center rounded-md p-0 text-[#12345a] transition hover:bg-[#e8f0f8] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[#f4b942]" type="button" aria-label={`Edit ${assignment.name}`} title="Edit assignment">
+                  <button className="assignment-icon-button assignment-edit-button" type="button" aria-label={`Edit ${assignment.name}`} title="Edit assignment">
                     <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L8 18l-4 1 1-4Z"/><path d="m15 5 4 4"/></svg>
                   </button>
                   <button
-                    className="assignment-delete-button grid h-8 w-8 place-items-center rounded-md p-0 text-[#a12622] transition hover:bg-[#fbe9e7] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[#f4b942]"
+                    className="assignment-icon-button assignment-delete-button"
                     type="button"
                     aria-label={`Delete ${assignment.name}`}
                     title="Delete assignment"
