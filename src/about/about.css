@@ -1,6 +1,7 @@
 .about-main {
+	box-sizing: border-box;
 	position: relative;
-	width: min(100% - 24px, 1800px);
+	width: min(100%, 1800px);
 	max-width: none;
 }
 

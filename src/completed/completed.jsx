@@ -32,10 +32,11 @@ export function Complete () {
     }
 
     return (
-       <main>
+       <main className="completed-main">
       <div className="users">
         User: <span className="users">{username}</span>
       </div>
+      <div className="responsive-table">
       <table className="assignment-table completed-table">
         <caption>Completed Assignments</caption>
         <thead>
@@ -67,6 +68,7 @@ export function Complete () {
           ))}
         </tbody>
       </table>
+      </div>
       {completedAssignments.length === 0 && <p>No completed assignments yet.</p>}
     </main>
     );

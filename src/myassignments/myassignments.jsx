@@ -64,7 +64,7 @@ export function MyAssignments() {
   }
 
   return (
-    <main>
+    <main className="assignments-main">
       <div className="users">
         User: <span className="users">{username}</span>
       </div>
@@ -82,11 +82,12 @@ export function MyAssignments() {
           />
         </label>
       </div>
-      <table
-        className="assignment-table"
-        id="upcoming-assignment-table"
-        aria-labelledby="upcoming-heading"
-      >
+      <div className="responsive-table">
+        <table
+          className="assignment-table"
+          id="upcoming-assignment-table"
+          aria-labelledby="upcoming-heading"
+        >
         <thead>
           <tr>
             <th className="assignment-edit-heading" scope="col">Actions</th>
@@ -238,7 +239,8 @@ export function MyAssignments() {
             );
           })}
         </tbody>
-      </table>
+        </table>
+      </div>
       <p
         className="assignment-filter-empty"
         id="assignment-filter-empty"
