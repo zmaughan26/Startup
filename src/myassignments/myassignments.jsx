@@ -55,7 +55,7 @@ export function MyAssignments() {
       >
         <thead>
           <tr>
-            <th className="assignment-edit-heading" scope="col">Edit</th>
+            <th className="assignment-edit-heading" scope="col">Actions</th>
             <th scope="col">Assignment</th>
             <th scope="col">Class</th>
             <th scope="col">Due date</th>
@@ -80,6 +80,24 @@ export function MyAssignments() {
                 <td className="assignment-edit-cell">
                   <button className="assignment-edit-button grid h-8 w-8 place-items-center rounded-md p-0 text-[#12345a] transition hover:bg-[#e8f0f8] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[#f4b942]" type="button" aria-label={`Edit ${assignment.name}`} title="Edit assignment">
                     <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L8 18l-4 1 1-4Z"/><path d="m15 5 4 4"/></svg>
+                  </button>
+                  <button
+                    className="assignment-delete-button grid h-8 w-8 place-items-center rounded-md p-0 text-[#a12622] transition hover:bg-[#fbe9e7] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[#f4b942]"
+                    type="button"
+                    aria-label={`Delete ${assignment.name}`}
+                    title="Delete assignment"
+                    onClick={() => {
+                      setAssignments((currentAssignments) =>
+                        currentAssignments.filter((currentAssignment) => currentAssignment.id !== assignment.id)
+                      );
+                    }}
+                  >
+                    <svg aria-hidden="true" viewBox="0 0 24 24">
+                      <path d="M3 6h18" />
+                      <path d="M8 6V4h8v2" />
+                      <path d="m19 6-1 14H6L5 6" />
+                      <path d="M10 11v5M14 11v5" />
+                    </svg>
                   </button>
                 </td>
                 <td>{assignment.name}</td>

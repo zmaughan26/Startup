@@ -232,11 +232,23 @@ main h1 {
 
 .assignment-edit-heading,
 .assignment-edit-cell {
-	width: 64px;
+	width: 130px;
 	text-align: center;
 }
 
-.assignment-edit-button svg {
+.assignment-edit-cell {
+	white-space: nowrap;
+}
+
+.assignment-delete-button {
+	margin-left: 4px;
+	border: 0;
+	background: transparent;
+	cursor: pointer;
+}
+
+.assignment-edit-button svg,
+.assignment-delete-button svg {
 	width: 17px;
 	height: 17px;
 	fill: none;
