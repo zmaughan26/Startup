@@ -101,57 +101,6 @@ main h1 {
 	text-align: center;
 }
 
-.about-main {
-	max-width: 900px;
-}
-
-.about-main h2 {
-	margin: 0 0 24px;
-	color: #12345a;
-	font-size: 1.8rem;
-}
-
-.about-content {
-	display: grid;
-	grid-template-columns: minmax(0, 1fr) minmax(220px, 300px);
-	align-items: center;
-	gap: 40px;
-	color: #334155;
-	font-size: 1.05rem;
-	line-height: 1.7;
-}
-
-.about-figure {
-	margin: 0;
-}
-
-.about-figure img {
-	display: block;
-	width: 100%;
-	height: auto;
-	border: 1px solid #d4dce6;
-	border-radius: 6px;
-	box-shadow: 0 8px 20px rgba(20, 42, 68, 0.12);
-}
-
-.about-figure figcaption {
-	margin-top: 9px;
-	color: #52657a;
-	font-size: 0.9rem;
-	text-align: center;
-}
-
-@media (max-width: 640px) {
-	.about-content {
-		grid-template-columns: 1fr;
-		gap: 20px;
-	}
-
-	.about-figure {
-		max-width: 340px;
-	}
-}
-
 .assignment-table {
 	width: 100%;
 	margin: 24px 0;

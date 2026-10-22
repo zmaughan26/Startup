@@ -1,4 +1,5 @@
 import React from "react";
+import "./about.css";
 
 export function Info () {
     return (
@@ -13,11 +14,11 @@ export function Info () {
             This version is a static HTML prototype. Assignment examples are built into the pages, and login, add, and edit controls are not connected to data storage yet.
           </p>
         </div>
-        <figure className="about-figure">
-          <img src="Assignmentphoto.jpeg" alt="A pinned note labeled Assignment" />
-          <figcaption>Keep your coursework in view.</figcaption>
-        </figure>
       </section>
+      <figure className="about-figure">
+        <img src="Assignmentphoto.jpeg" alt="A pinned note labeled Assignment" />
+        <figcaption>Keep your coursework in view.</figcaption>
+      </figure>
     </main>
     );
 }

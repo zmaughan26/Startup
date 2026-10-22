@@ -1,0 +1,65 @@
+.about-main {
+	position: relative;
+	width: min(100% - 24px, 1800px);
+	max-width: none;
+}
+
+.about-main h2 {
+	margin: 0 0 24px;
+	color: #12345a;
+	font-size: 1.8rem;
+}
+
+.about-content {
+	width: 58%;
+	color: #334155;
+	font-size: 1.05rem;
+	line-height: 1.7;
+}
+
+.about-content p {
+	margin: 0 0 18px;
+}
+
+.about-content p:last-child {
+	margin-bottom: 0;
+}
+
+.about-figure {
+	position: absolute;
+	top: 56px;
+	right: 0;
+	width: 34%;
+	max-width: 520px;
+	margin: 0;
+}
+
+.about-figure img {
+	display: block;
+	width: 100%;
+	aspect-ratio: 4 / 3;
+	object-fit: cover;
+	border: 1px solid #d4dce6;
+	border-radius: 6px;
+	box-shadow: 0 8px 20px rgba(20, 42, 68, 0.12);
+}
+
+.about-figure figcaption {
+	margin-top: 9px;
+	color: #52657a;
+	font-size: 0.9rem;
+	text-align: center;
+}
+
+@media (max-width: 800px) {
+	.about-content {
+		width: 100%;
+	}
+
+	.about-figure {
+		position: static;
+		width: 100%;
+		max-width: 520px;
+		margin-top: 24px;
+	}
+}
