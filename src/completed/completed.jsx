@@ -1,10 +1,34 @@
 import React, { useState } from "react";
+import "./completed.css";
 
 export function Complete () {
-    const [completedAssignments] = useState(() => {
+    const [completedAssignments, setCompletedAssignments] = useState(() => {
       const savedAssignments = localStorage.getItem("studytrack.completedAssignments");
       return savedAssignments ? JSON.parse(savedAssignments) : [];
     });
+
+    function reopenAssignment(assignment) {
+      const upcomingAssignments = JSON.parse(
+        localStorage.getItem("studytrack.assignments") || "[]"
+      );
+      const { completedOn, ...reopenedAssignment } = assignment;
+      localStorage.setItem(
+        "studytrack.assignments",
+        JSON.stringify([
+          ...upcomingAssignments,
+          { ...reopenedAssignment, completed: false },
+        ])
+      );
+
+      const remainingAssignments = completedAssignments.filter(
+        (completedAssignment) => completedAssignment.id !== assignment.id
+      );
+      localStorage.setItem(
+        "studytrack.completedAssignments",
+        JSON.stringify(remainingAssignments)
+      );
+      setCompletedAssignments(remainingAssignments);
+    }
 
     return (
        <main>
@@ -15,7 +39,8 @@ export function Complete () {
             <th scope="col">Status</th>
             <th scope="col">Assignment</th>
             <th scope="col">Class</th>
-            <th scope="col">Completed on</th>
+            <th scope="col">Date</th>
+            <th scope="col">Completed</th>
           </tr>
         </thead>
         <tbody>
@@ -25,6 +50,15 @@ export function Complete () {
               <td>{assignment.name}</td>
               <td>{assignment.className}</td>
               <td>{assignment.completedOn}</td>
+              <td className="assignment-checkbox-cell">
+                <input
+                  className="assignment-checkbox"
+                  type="checkbox"
+                  checked
+                  aria-label={`Move ${assignment.name} back to upcoming assignments`}
+                  onChange={() => reopenAssignment(assignment)}
+                />
+              </td>
             </tr>
           ))}
         </tbody>

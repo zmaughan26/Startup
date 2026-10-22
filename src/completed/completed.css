@@ -1,0 +1,43 @@
+.completed-table {
+	width: 100%;
+	table-layout: fixed;
+}
+
+.completed-table th,
+.completed-table td {
+	overflow-wrap: anywhere;
+}
+
+.completed-table th {
+	white-space: nowrap;
+}
+
+.completed-table th:nth-child(1),
+.completed-table td:nth-child(1) {
+	width: 15%;
+}
+
+.completed-table th:nth-child(2),
+.completed-table td:nth-child(2) {
+	width: 27%;
+}
+
+.completed-table th:nth-child(3),
+.completed-table td:nth-child(3) {
+	width: 18%;
+}
+
+.completed-table th:nth-child(4),
+.completed-table td:nth-child(4) {
+	width: 20%;
+}
+
+.completed-table th:nth-child(5),
+.completed-table td:nth-child(5) {
+	width: 20%;
+}
+
+.completed-table th:last-child,
+.completed-table td:last-child {
+	text-align: center;
+}
