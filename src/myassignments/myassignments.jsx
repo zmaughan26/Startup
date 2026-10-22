@@ -1,12 +1,21 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./myassignments.css";
 
 export function MyAssignments() {
-  const [assignments, setAssignments] = useState([]);
+  const username = localStorage.getItem("username") || "Guest";
+  const [assignments, setAssignments] = useState(() => {
+    const savedAssignments = localStorage.getItem("studytrack.assignments");
+    return savedAssignments ? JSON.parse(savedAssignments) : [];
+  });
   const [newAssignmentName, setNewAssignmentName] = useState("");
   const [newAssignmentClass, setNewAssignmentClass] = useState("");
   const [newAssignmentDueDate, setNewAssignmentDueDate] = useState("");
   const [filter, setFilter] = useState("");
+
+  useEffect(() => {
+    localStorage.setItem("studytrack.assignments", JSON.stringify(assignments));
+  }, [assignments]);
+
   const filteredAssignments = assignments.filter((assignment) => {
     const searchText = `${assignment.name} ${assignment.className} ${assignment.dueDate}`.toLowerCase();
     return searchText.includes(filter.trim().toLowerCase());
@@ -38,8 +47,7 @@ export function MyAssignments() {
   return (
     <main>
       <div className="users">
-        User:
-        <span className="users">Student Name</span>
+        User: <span className="users">{username}</span>
       </div>
       <div className="assignment-table-toolbar">
         <h2 id="upcoming-heading">Upcoming Assignments</h2>
