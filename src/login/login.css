@@ -1,18 +1,42 @@
-.login-submit {
+.login-button {
+	width: 100%;
+	min-height: 44px;
 	padding: 10px 20px;
 	border: 0;
-	border-radius: 6px;
-	background: #12345a;
+	border-radius: 8px;
 	color: #fff;
+	font: inherit;
 	font-weight: 600;
 	cursor: pointer;
+	transition: background-color 140ms ease, transform 140ms ease;
+}
+
+.login-submit {
+	background: #12345a;
 }
 
 .login-submit:hover {
 	background: #1b4a78;
 }
 
+.login-create {
+	background: #2563a6;
+}
+
+.login-create:hover {
+	background: #1d4f87;
+}
+
+.login-button:hover {
+	transform: translateY(-1px);
+}
+
 .login-submit:focus-visible {
+	outline: 3px solid #f4b942;
+	outline-offset: 2px;
+}
+
+.login-create:focus-visible {
 	outline: 3px solid #f4b942;
 	outline-offset: 2px;
 }

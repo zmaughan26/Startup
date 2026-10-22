@@ -26,10 +26,10 @@ export function Login() {
           <span>🔒</span>
           <input type="password" name="password" placeholder="Password" required />
         </div>
-        <button className="login-submit" type="submit">
+        <button className="login-button login-submit" type="submit">
           Login
         </button>
-        <button className="rounded-md border border-[#12345a] bg-white px-5 py-2.5" type="button">
+        <button className="login-button login-create" type="button">
           Create
         </button>
       </form>
