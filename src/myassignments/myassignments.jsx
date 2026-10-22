@@ -4,12 +4,14 @@ import "./myassignments.css";
 export function MyAssignments() {
   const [assignments, setAssignments] = useState([]);
   const [newAssignmentName, setNewAssignmentName] = useState("");
+  const [newAssignmentClass, setNewAssignmentClass] = useState("");
   const [newAssignmentDueDate, setNewAssignmentDueDate] = useState("");
 
   function addAssignment(event) {
     event.preventDefault();
     const name = newAssignmentName.trim();
-    if (!name || !newAssignmentDueDate) {
+    const className = newAssignmentClass.trim();
+    if (!name || !className || !newAssignmentDueDate) {
       return;
     }
 
@@ -18,12 +20,13 @@ export function MyAssignments() {
       {
         id: Date.now(),
         name,
-        className: "Other",
+        className,
         dueDate: newAssignmentDueDate,
         completed: false,
       },
     ]);
     setNewAssignmentName("");
+    setNewAssignmentClass("");
     setNewAssignmentDueDate("");
   }
 
@@ -127,9 +130,6 @@ export function MyAssignments() {
       </p>
 
       <form className="assignment-actions" onSubmit={addAssignment}>
-        <button className="assignment-action-button w-full rounded-md bg-[#12345a] px-4 py-3 font-semibold text-white shadow-sm transition hover:-translate-y-px hover:bg-[#1b4a78] hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f4b942] sm:w-auto" type="submit">
-          Add Assignment
-        </button>
         <input
           type="text"
           aria-label="New assignment name"
@@ -139,12 +139,23 @@ export function MyAssignments() {
           required
         />
         <input
+          type="text"
+          aria-label="New assignment class"
+          placeholder="Class"
+          value={newAssignmentClass}
+          onChange={(event) => setNewAssignmentClass(event.target.value)}
+          required
+        />
+        <input
           type="date"
           aria-label="New assignment due date"
           value={newAssignmentDueDate}
           onChange={(event) => setNewAssignmentDueDate(event.target.value)}
           required
         />
+        <button className="assignment-form-submit" type="submit">
+          Add Assignment
+        </button>
       </form>
     </main>
   );

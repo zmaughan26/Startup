@@ -62,3 +62,34 @@
 	border-color: #efc1bd;
 	background: #fbe9e7;
 }
+
+.assignment-form-submit {
+	min-height: 44px;
+	padding: 10px 18px;
+	border: 0;
+	border-radius: 8px;
+	background: #12345a;
+	color: #fff;
+	font: inherit;
+	font-weight: 600;
+	box-shadow: 0 2px 5px rgba(18, 52, 90, 0.18);
+	cursor: pointer;
+	transition: background-color 140ms ease, box-shadow 140ms ease, transform 140ms ease;
+}
+
+.assignment-form-submit:hover {
+	transform: translateY(-1px);
+	background: #1b4a78;
+	box-shadow: 0 4px 8px rgba(18, 52, 90, 0.2);
+}
+
+.assignment-form-submit:focus-visible {
+	outline: 3px solid #f4b942;
+	outline-offset: 2px;
+}
+
+@media (max-width: 480px) {
+	.assignment-form-submit {
+		width: 100%;
+	}
+}
