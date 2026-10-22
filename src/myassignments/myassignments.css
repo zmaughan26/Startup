@@ -1,6 +1,6 @@
 .assignment-edit-heading,
 .assignment-edit-cell {
-	width: 116px;
+	width: 140px;
 	text-align: center;
 }
 
@@ -61,6 +61,36 @@
 .assignment-delete-button:hover {
 	border-color: #efc1bd;
 	background: #fbe9e7;
+}
+
+.assignment-row-action {
+	padding: 6px 8px;
+	border: 0;
+	border-radius: 5px;
+	font: inherit;
+	font-size: 0.85rem;
+	font-weight: 600;
+	cursor: pointer;
+}
+
+.assignment-row-save {
+	background: #12345a;
+	color: #fff;
+}
+
+.assignment-row-save:hover {
+	background: #1b4a78;
+}
+
+.assignment-row-cancel {
+	margin-left: 4px;
+	background: #e8f0f8;
+	color: #12345a;
+}
+
+.assignment-row-action:focus-visible {
+	outline: 3px solid #f4b942;
+	outline-offset: 2px;
 }
 
 .assignment-form-submit {
