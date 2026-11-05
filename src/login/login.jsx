@@ -13,6 +13,8 @@ export function Login({ onAuthenticated }) {
     const formData = new FormData(event.currentTarget);
     setSubmitting(true);
     setError("");
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000);
 
     try {
       const response = await fetch(
@@ -20,6 +22,7 @@ export function Login({ onAuthenticated }) {
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
+          signal: controller.signal,
           body: JSON.stringify({
             username: formData.get("username"),
             password: formData.get("password"),
@@ -35,8 +38,13 @@ export function Login({ onAuthenticated }) {
       onAuthenticated(result.username);
       navigate("/myassignments");
     } catch (requestError) {
-      setError(requestError.message || "Could not connect to the service.");
+      setError(
+        requestError.name === "AbortError"
+          ? "The service did not respond. Restart it from the service folder and try again."
+          : requestError.message || "Could not connect to the service."
+      );
     } finally {
+      clearTimeout(timeoutId);
       setSubmitting(false);
     }
   }
