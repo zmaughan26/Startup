@@ -51,11 +51,11 @@ export function Complete () {
         <tbody>
           {completedAssignments.map((assignment) => (
             <tr key={assignment.id}>
-              <td>Complete</td>
-              <td>{assignment.name}</td>
-              <td>{assignment.className}</td>
-              <td>{assignment.completedOn}</td>
-              <td className="assignment-checkbox-cell">
+              <td data-label="Status">Complete</td>
+              <td data-label="Assignment">{assignment.name}</td>
+              <td data-label="Class">{assignment.className}</td>
+              <td data-label="Date">{assignment.completedOn}</td>
+              <td className="assignment-checkbox-cell" data-label="Completed">
                 <input
                   className="assignment-checkbox"
                   type="checkbox"

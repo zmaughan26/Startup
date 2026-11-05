@@ -5,6 +5,8 @@ export function MyAssignments() {
   const username = localStorage.getItem("username") || "Guest";
   const [assignments, setAssignments] = useState([]);
   const [error, setError] = useState("");
+  const [quote, setQuote] = useState(null);
+  const [quoteError, setQuoteError] = useState("");
   const [newAssignmentName, setNewAssignmentName] = useState("");
   const [newAssignmentClass, setNewAssignmentClass] = useState("");
   const [newAssignmentDueDate, setNewAssignmentDueDate] = useState("");
@@ -34,6 +36,37 @@ export function MyAssignments() {
     }
 
     loadAssignments();
+    return () => {
+      ignore = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    let ignore = false;
+
+    async function loadQuote() {
+      try {
+        const response = await fetch("https://dummyjson.com/quotes/random");
+        if (!response.ok) {
+          throw new Error("Quote request failed.");
+        }
+
+        const result = await response.json();
+        if (typeof result.quote !== "string" || typeof result.author !== "string") {
+          throw new Error("Quote response was invalid.");
+        }
+
+        if (!ignore) {
+          setQuote(result);
+        }
+      } catch {
+        if (!ignore) {
+          setQuoteError("Could not load a quote right now.");
+        }
+      }
+    }
+
+    loadQuote();
     return () => {
       ignore = true;
     };
@@ -95,6 +128,19 @@ export function MyAssignments() {
       <div className="users">
         User: <span className="users">{username}</span>
       </div>
+      <section className="daily-quote" aria-label="Quote of the day">
+        <h2>Study inspiration</h2>
+        {quote ? (
+          <blockquote>
+            <p>“{quote.quote}”</p>
+            <cite>— {quote.author}</cite>
+          </blockquote>
+        ) : (
+          <p role={quoteError ? "alert" : undefined}>
+            {quoteError || "Loading an inspirational quote..."}
+          </p>
+        )}
+      </section>
       <div className="assignment-table-toolbar">
         <h2 id="upcoming-heading">Upcoming Assignments</h2>
         <label className="assignment-filter" htmlFor="assignment-filter">

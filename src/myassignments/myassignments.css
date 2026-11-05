@@ -1,3 +1,35 @@
+.daily-quote {
+	margin: 20px 0 28px;
+	padding: 16px 20px;
+	border-left: 4px solid #f4b942;
+	border-radius: 6px;
+	background: #e8f0f8;
+	color: #12345a;
+}
+
+.daily-quote h2 {
+	margin: 0 0 8px;
+	font-size: 1rem;
+	font-weight: 700;
+}
+
+.daily-quote blockquote,
+.daily-quote p {
+	margin: 0;
+}
+
+.daily-quote blockquote p {
+	font-style: italic;
+}
+
+.daily-quote cite {
+	display: block;
+	margin-top: 6px;
+	font-size: 0.9rem;
+	font-style: normal;
+	text-align: right;
+}
+
 .assignment-edit-heading,
 .assignment-edit-cell {
 	width: 140px;
