@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import './app.css';
 
@@ -10,6 +10,51 @@ import { MyAssignments } from "./myassignments/myassignments.jsx";
 
 
 export default function App() {
+  const [username, setUsername] = useState("");
+  const [authError, setAuthError] = useState("");
+
+  useEffect(() => {
+    let ignore = false;
+
+    async function loadCurrentUser() {
+      try {
+        const response = await fetch("/api/auth/me");
+        if (!ignore && response.ok) {
+          const user = await response.json();
+          setUsername(user.username);
+          localStorage.setItem("username", user.username);
+        } else if (!ignore) {
+          setUsername("");
+          localStorage.removeItem("username");
+        }
+      } catch {
+        if (!ignore) {
+          setAuthError("Could not verify your login. Please refresh the page.");
+        }
+      }
+    }
+
+    loadCurrentUser();
+    return () => {
+      ignore = true;
+    };
+  }, []);
+
+  async function logout() {
+    try {
+      const response = await fetch("/api/auth/logout", { method: "POST" });
+      if (!response.ok) {
+        throw new Error("Could not log out. Please try again.");
+      }
+      localStorage.removeItem("username");
+      localStorage.removeItem("studytrack.completedAssignments");
+      setUsername("");
+      setAuthError("");
+    } catch (error) {
+      setAuthError(error.message);
+    }
+  }
+
   return (
     <BrowserRouter>
       <div className="body">
@@ -21,14 +66,23 @@ export default function App() {
               <li><NavLink to="/myassignments">My Assignments</NavLink></li>
               <li><NavLink to="/completed">Completed Assignments</NavLink></li>
               <li><NavLink to="/about">About</NavLink></li>
+              {username && (
+                <li>
+                  <button className="nav-logout" type="button" onClick={logout}>
+                    Log out ({username})
+                  </button>
+                </li>
+              )}
             </ul>
           </nav>
         </header>
 
+        {authError && <p className="auth-alert" role="alert">{authError}</p>}
+
         <div className="app-content">
           <Routes>
-            <Route path="/" element={<Login />} />
-            <Route path="/login" element={<Login />} />
+            <Route path="/" element={<Login onAuthenticated={setUsername} />} />
+            <Route path="/login" element={<Login onAuthenticated={setUsername} />} />
             <Route path="/about" element={<Info />} />
             <Route path="/completed" element={<Complete />} />
             <Route path="/myassignments" element={<MyAssignments />} />

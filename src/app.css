@@ -78,8 +78,24 @@ header hr {
 }
 
 .header-nav .nav-logout {
+	padding: 9px 11px;
+	border: 1px solid rgba(255, 255, 255, 0.45);
+	border-radius: 4px;
+	background: transparent;
+	color: #fff;
+	font: inherit;
+	font-size: 14px;
+	font-weight: 600;
+	cursor: pointer;
+}
+
+.header-nav .nav-logout:hover,
+.header-nav .nav-logout:focus-visible {
+	background: rgba(255, 255, 255, 0.16);
+}
+
+.header-nav .nav-logout {
 	margin-left: 5px;
-	border-left: 1px solid rgba(255, 255, 255, 0.45);
 }
 
 @media (max-width: 480px) {
@@ -353,4 +369,14 @@ footer a {
 	color: #12345a;
 	font-weight: 600;
 	text-underline-offset: 3px;
+}
+
+.auth-alert {
+	width: min(100% - 32px, 1280px);
+	margin: 16px auto;
+	padding: 10px 14px;
+	border: 1px solid #efc1bd;
+	border-radius: 6px;
+	background: #fbe9e7;
+	color: #8d211d;
 }

@@ -107,14 +107,14 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] I completed the prerequisites for this deliverable (Simon deployed, GitHub link, Git commits)
-- [ ] **Node.js/Express HTTP service** - I did not complete this part of the deliverable.
-- [ ] **Static middleware for frontend** - I did not complete this part of the deliverable.
-- [ ] **Calls to third party endpoints** - I did not complete this part of the deliverable.
-- [ ] **Backend service endpoints** - I did not complete this part of the deliverable.
-- [ ] **Frontend calls service endpoints** - I did not complete this part of the deliverable.
-- [ ] **Supports registration, login, logout, and restricted endpoint** - I did not complete this part of the deliverable.
-- [ ] **Uses BCrypt to hash passwords** - I did not complete this part of the deliverable.
+- [x] I completed the prerequisites for this deliverable (Simon deployed, GitHub link, Git commits)
+- [x] **Node.js/Express HTTP service** - Built an Express server in `service/index.js` that listens on port 4000.
+- [x] **Static middleware for frontend** - Added Express static middleware to serve files from the `public` directory.
+- [x] **Calls to third party endpoints** - The assignments page fetches and displays a quote from the DummyJSON Quotes API.
+- [x] **Backend service endpoints** - Added endpoints to list, add, and delete assignments; assignment data is currently stored in memory.
+- [x] **Frontend calls service endpoints** - The assignments page uses `fetch` to load, create, complete, delete, and reopen assignments through the service API.
+- [x] **Supports registration, login, logout, and restricted endpoint** - Added account registration and login with server-side sessions, a logout action, and assignment API routes that require an authenticated session. User accounts and assignments currently live in memory.
+- [x] **Uses BCrypt to hash passwords** - Passwords are hashed with `bcryptjs` before being stored; only the hash is kept in the in-memory user list.
 
 ## 🚀 DB deliverable
 

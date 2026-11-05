@@ -21,16 +21,20 @@ export function MyAssignments() {
       try {
         const response = await fetch("/api/assignments");
         if (!response.ok) {
-          throw new Error("Could not load assignments.");
+          throw new Error(
+            response.status === 401
+              ? "Please log in to view your assignments."
+              : "Could not load assignments. Please try again."
+          );
         }
         const loadedAssignments = await response.json();
         if (!ignore) {
           setAssignments(loadedAssignments);
           setError("");
         }
-      } catch {
+      } catch (requestError) {
         if (!ignore) {
-          setError("Could not load assignments. Please try again.");
+          setError(requestError.message || "Could not load assignments. Please try again.");
         }
       }
     }
@@ -92,7 +96,11 @@ export function MyAssignments() {
         body: JSON.stringify({ name, className, dueDate: newAssignmentDueDate }),
       });
       if (!response.ok) {
-        throw new Error("Could not save assignment.");
+        throw new Error(
+          response.status === 401
+            ? "Please log in to add assignments."
+            : "Could not save assignment. Please try again."
+        );
       }
 
       const savedAssignment = await response.json();
@@ -101,8 +109,8 @@ export function MyAssignments() {
       setNewAssignmentClass("");
       setNewAssignmentDueDate("");
       setError("");
-    } catch {
-      setError("Could not save assignment. Please try again.");
+    } catch (requestError) {
+      setError(requestError.message || "Could not save assignment. Please try again.");
     }
   }
 
@@ -112,7 +120,11 @@ export function MyAssignments() {
         method: "DELETE",
       });
       if (!response.ok) {
-        throw new Error("Could not remove assignment.");
+        throw new Error(
+          response.status === 401
+            ? "Please log in to complete assignments."
+            : "Could not complete assignment. Please try again."
+        );
       }
 
       const completedAssignments = JSON.parse(
@@ -132,8 +144,8 @@ export function MyAssignments() {
         currentAssignments.filter((currentAssignment) => currentAssignment.id !== assignment.id)
       );
       setError("");
-    } catch {
-      setError("Could not complete assignment. Please try again.");
+    } catch (requestError) {
+      setError(requestError.message || "Could not complete assignment. Please try again.");
     }
   }
 
@@ -143,15 +155,19 @@ export function MyAssignments() {
         method: "DELETE",
       });
       if (!response.ok) {
-        throw new Error("Could not delete assignment.");
+        throw new Error(
+          response.status === 401
+            ? "Please log in to delete assignments."
+            : "Could not delete assignment. Please try again."
+        );
       }
 
       setAssignments((currentAssignments) =>
         currentAssignments.filter((assignment) => assignment.id !== assignmentId)
       );
       setError("");
-    } catch {
-      setError("Could not delete assignment. Please try again.");
+    } catch (requestError) {
+      setError(requestError.message || "Could not delete assignment. Please try again.");
     }
   }
 
