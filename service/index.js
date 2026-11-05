@@ -39,6 +39,20 @@ app.post('/api/assignments', (req, res) => {
   res.status(201).json(assignment);
 });
 
+app.delete('/api/assignments/:id', (req, res) => {
+  const assignmentId = Number(req.params.id);
+  const assignmentIndex = assignments.findIndex(
+    (assignment) => assignment.id === assignmentId
+  );
+
+  if (!Number.isSafeInteger(assignmentId) || assignmentIndex === -1) {
+    return res.status(404).json({ error: 'Assignment not found.' });
+  }
+
+  assignments.splice(assignmentIndex, 1);
+  res.status(204).end();
+});
+
 app.listen(port, () => {
   console.log(`Listening on port ${port}`);
 });

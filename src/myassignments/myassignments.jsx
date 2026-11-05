@@ -106,6 +106,55 @@ export function MyAssignments() {
     }
   }
 
+  async function completeAssignment(assignment) {
+    try {
+      const response = await fetch(`/api/assignments/${assignment.id}`, {
+        method: "DELETE",
+      });
+      if (!response.ok) {
+        throw new Error("Could not remove assignment.");
+      }
+
+      const completedAssignments = JSON.parse(
+        localStorage.getItem("studytrack.completedAssignments") || "[]"
+      );
+      const remainingCompletedAssignments = completedAssignments.filter(
+        (completedAssignment) => completedAssignment.id !== assignment.id
+      );
+      localStorage.setItem(
+        "studytrack.completedAssignments",
+        JSON.stringify([
+          ...remainingCompletedAssignments,
+          { ...assignment, completed: true, completedOn: new Date().toLocaleDateString() },
+        ])
+      );
+      setAssignments((currentAssignments) =>
+        currentAssignments.filter((currentAssignment) => currentAssignment.id !== assignment.id)
+      );
+      setError("");
+    } catch {
+      setError("Could not complete assignment. Please try again.");
+    }
+  }
+
+  async function deleteAssignment(assignmentId) {
+    try {
+      const response = await fetch(`/api/assignments/${assignmentId}`, {
+        method: "DELETE",
+      });
+      if (!response.ok) {
+        throw new Error("Could not delete assignment.");
+      }
+
+      setAssignments((currentAssignments) =>
+        currentAssignments.filter((assignment) => assignment.id !== assignmentId)
+      );
+      setError("");
+    } catch {
+      setError("Could not delete assignment. Please try again.");
+    }
+  }
+
   function saveAssignment(assignmentId) {
     const name = editDraft.name.trim();
     const className = editDraft.className.trim();
@@ -226,11 +275,7 @@ export function MyAssignments() {
                         type="button"
                         aria-label={`Delete ${assignment.name}`}
                         title="Delete assignment"
-                        onClick={() => {
-                          setAssignments((currentAssignments) =>
-                            currentAssignments.filter((currentAssignment) => currentAssignment.id !== assignment.id)
-                          );
-                        }}
+                        onClick={() => deleteAssignment(assignment.id)}
                       >
                         <svg aria-hidden="true" viewBox="0 0 24 24">
                           <path d="M3 6h18" />
@@ -281,29 +326,7 @@ export function MyAssignments() {
                     aria-label={`Mark ${assignment.name} complete`}
                     onChange={(event) => {
                       if (event.target.checked) {
-                        const completedAssignments = JSON.parse(
-                          localStorage.getItem("studytrack.completedAssignments") || "[]"
-                        );
-                        localStorage.setItem(
-                          "studytrack.completedAssignments",
-                          JSON.stringify([
-                            ...completedAssignments,
-                            { ...assignment, completed: true, completedOn: new Date().toLocaleDateString() },
-                          ])
-                        );
-                        setAssignments((currentAssignments) =>
-                          currentAssignments.filter(
-                            (currentAssignment) => currentAssignment.id !== assignment.id
-                          )
-                        );
-                      } else {
-                        setAssignments((currentAssignments) =>
-                          currentAssignments.map((currentAssignment) =>
-                            currentAssignment.id === assignment.id
-                              ? { ...currentAssignment, completed: false }
-                              : currentAssignment
-                          )
-                        );
+                        completeAssignment(assignment);
                       }
                     }}
                   />

@@ -3,32 +3,39 @@ import "./completed.css";
 
 export function Complete () {
     const username = localStorage.getItem("username") || "Guest";
+    const [error, setError] = useState("");
     const [completedAssignments, setCompletedAssignments] = useState(() => {
       const savedAssignments = localStorage.getItem("studytrack.completedAssignments");
       return savedAssignments ? JSON.parse(savedAssignments) : [];
     });
 
-    function reopenAssignment(assignment) {
-      const upcomingAssignments = JSON.parse(
-        localStorage.getItem("studytrack.assignments") || "[]"
-      );
-      const { completedOn, ...reopenedAssignment } = assignment;
-      localStorage.setItem(
-        "studytrack.assignments",
-        JSON.stringify([
-          ...upcomingAssignments,
-          { ...reopenedAssignment, completed: false },
-        ])
-      );
+    async function reopenAssignment(assignment) {
+      try {
+        const response = await fetch("/api/assignments", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: assignment.name,
+            className: assignment.className,
+            dueDate: assignment.dueDate,
+          }),
+        });
+        if (!response.ok) {
+          throw new Error("Could not reopen assignment.");
+        }
 
-      const remainingAssignments = completedAssignments.filter(
-        (completedAssignment) => completedAssignment.id !== assignment.id
-      );
-      localStorage.setItem(
-        "studytrack.completedAssignments",
-        JSON.stringify(remainingAssignments)
-      );
-      setCompletedAssignments(remainingAssignments);
+        const remainingAssignments = completedAssignments.filter(
+          (completedAssignment) => completedAssignment.id !== assignment.id
+        );
+        localStorage.setItem(
+          "studytrack.completedAssignments",
+          JSON.stringify(remainingAssignments)
+        );
+        setCompletedAssignments(remainingAssignments);
+        setError("");
+      } catch {
+        setError("Could not reopen assignment. Please try again.");
+      }
     }
 
     return (
@@ -73,6 +80,7 @@ export function Complete () {
         </tbody>
       </table>
       </div>
+      {error && <p role="alert">{error}</p>}
       {completedAssignments.length === 0 && <p>No completed assignments yet.</p>}
     </main>
     );
