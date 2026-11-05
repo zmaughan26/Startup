@@ -25,7 +25,7 @@ export default function App() {
           </nav>
         </header>
 
-        <main>
+        <div className="app-content">
           <Routes>
             <Route path="/" element={<Login />} />
             <Route path="/login" element={<Login />} />
@@ -34,7 +34,7 @@ export default function App() {
             <Route path="/myassignments" element={<MyAssignments />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
-        </main>
+        </div>
 
         <footer>
           <hr />

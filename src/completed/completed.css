@@ -3,6 +3,10 @@
 	table-layout: fixed;
 }
 
+.completed-main .responsive-table {
+	overflow-x: hidden;
+}
+
 .completed-table th,
 .completed-table td {
 	box-sizing: border-box;
@@ -16,12 +20,12 @@
 
 .completed-table th:nth-child(1),
 .completed-table td:nth-child(1) {
-	width: 15%;
+	width: 20%;
 }
 
 .completed-table th:nth-child(2),
 .completed-table td:nth-child(2) {
-	width: 27%;
+	width: 22%;
 }
 
 .completed-table th:nth-child(3),
@@ -44,7 +48,45 @@
 	text-align: center;
 }
 
-@media (max-width: 700px) {
+.completed-table tbody tr {
+	background: #f3faf4;
+}
+
+.completed-table tbody tr:hover {
+	background: #e8f5e9;
+}
+
+.completed-table tbody td:first-child {
+	color: #276738;
+	font-weight: 600;
+}
+
+.completed-status {
+	display: inline-block;
+	padding: 4px 10px;
+	border-radius: 999px;
+	background: #d9eedc;
+	color: #276738;
+	font-size: 0.88rem;
+	font-weight: 700;
+}
+
+.completed-reopen-control {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	color: #12345a;
+	font-size: 0.9rem;
+	font-weight: 600;
+	cursor: pointer;
+}
+
+.completed-reopen-control .assignment-checkbox {
+	flex: 0 0 auto;
+}
+
+@media (max-width: 900px) {
 	.responsive-table .completed-table {
 		display: block;
 		width: 100%;
@@ -67,41 +109,71 @@
 
 	.completed-table tbody {
 		display: grid;
-		gap: 12px;
+		gap: 14px;
 	}
 
-	.completed-table tbody tr {
+	.responsive-table .completed-table tbody tr {
 		display: grid;
 		grid-template-columns: repeat(2, minmax(0, 1fr));
-		border: 1px solid #d4dce6;
-		border-radius: 8px;
 		overflow: hidden;
+		border: 1px solid #d5e2d7;
+		border-radius: 14px;
+		background: #fff;
+		box-shadow: 0 4px 14px rgba(18, 52, 90, 0.08);
 	}
 
-	.completed-table tbody td {
+	.responsive-table .completed-table tbody tr > td {
 		display: flex;
 		width: auto;
 		min-width: 0;
 		flex-direction: column;
 		align-items: flex-start;
-		gap: 4px;
-		padding: 10px 12px;
+		gap: 6px;
+		padding: 13px 15px;
+		border-bottom: 1px solid #e8edf1;
 		overflow-wrap: anywhere;
+		color: #26384b;
 	}
 
 	.completed-table tbody td::before {
 		content: attr(data-label);
-		color: #12345a;
-		font-size: 0.8rem;
+		color: #63758a;
+		font-size: 0.72rem;
 		font-weight: 700;
+		letter-spacing: 0.07em;
+		text-transform: uppercase;
 	}
 
-	.completed-table tbody td:first-child {
+	.responsive-table .completed-table tbody tr > td:first-child {
 		grid-column: 1 / -1;
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-between;
+		padding: 12px 15px;
+		background: #f3faf4;
 		white-space: normal;
 	}
 
-	.completed-table tbody td:last-child {
+	.responsive-table .completed-table tbody tr > td:nth-child(2) {
+		grid-column: 1 / -1;
+	}
+
+	.responsive-table .completed-table tbody tr > td:last-child {
+		grid-column: 1 / -1;
+		flex-direction: row;
 		align-items: center;
+		justify-content: space-between;
+		border-bottom: 0;
+		background: #f8fafc;
+		text-align: left;
+	}
+
+	.completed-reopen-control {
+		width: auto;
+		justify-content: center;
+	}
+
+	.responsive-table .completed-table tbody tr > td:last-child .completed-reopen-control {
+		margin-left: auto;
 	}
 }

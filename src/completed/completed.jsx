@@ -51,18 +51,22 @@ export function Complete () {
         <tbody>
           {completedAssignments.map((assignment) => (
             <tr key={assignment.id}>
-              <td data-label="Status">Complete</td>
+              <td data-label="Status">
+                <span className="completed-status">Complete</span>
+              </td>
               <td data-label="Assignment">{assignment.name}</td>
               <td data-label="Class">{assignment.className}</td>
               <td data-label="Date">{assignment.completedOn}</td>
               <td className="assignment-checkbox-cell" data-label="Completed">
-                <input
-                  className="assignment-checkbox"
-                  type="checkbox"
-                  checked
-                  aria-label={`Move ${assignment.name} back to upcoming assignments`}
-                  onChange={() => reopenAssignment(assignment)}
-                />
+                <label className="completed-reopen-control">
+                  <input
+                    className="assignment-checkbox"
+                    type="checkbox"
+                    checked
+                    aria-label={`Move ${assignment.name} back to upcoming assignments`}
+                    onChange={() => reopenAssignment(assignment)}
+                  />
+                </label>
               </td>
             </tr>
           ))}
