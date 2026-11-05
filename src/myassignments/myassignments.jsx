@@ -3,10 +3,8 @@ import "./myassignments.css";
 
 export function MyAssignments() {
   const username = localStorage.getItem("username") || "Guest";
-  const [assignments, setAssignments] = useState(() => {
-    const savedAssignments = localStorage.getItem("studytrack.assignments");
-    return savedAssignments ? JSON.parse(savedAssignments) : [];
-  });
+  const [assignments, setAssignments] = useState([]);
+  const [error, setError] = useState("");
   const [newAssignmentName, setNewAssignmentName] = useState("");
   const [newAssignmentClass, setNewAssignmentClass] = useState("");
   const [newAssignmentDueDate, setNewAssignmentDueDate] = useState("");
@@ -15,15 +13,38 @@ export function MyAssignments() {
   const [editDraft, setEditDraft] = useState({ name: "", className: "", dueDate: "" });
 
   useEffect(() => {
-    localStorage.setItem("studytrack.assignments", JSON.stringify(assignments));
-  }, [assignments]);
+    let ignore = false;
+
+    async function loadAssignments() {
+      try {
+        const response = await fetch("/api/assignments");
+        if (!response.ok) {
+          throw new Error("Could not load assignments.");
+        }
+        const loadedAssignments = await response.json();
+        if (!ignore) {
+          setAssignments(loadedAssignments);
+          setError("");
+        }
+      } catch {
+        if (!ignore) {
+          setError("Could not load assignments. Please try again.");
+        }
+      }
+    }
+
+    loadAssignments();
+    return () => {
+      ignore = true;
+    };
+  }, []);
 
   const filteredAssignments = assignments.filter((assignment) => {
     const searchText = `${assignment.name} ${assignment.className} ${assignment.dueDate}`.toLowerCase();
     return searchText.includes(filter.trim().toLowerCase());
   });
 
-  function addAssignment(event) {
+  async function addAssignment(event) {
     event.preventDefault();
     const name = newAssignmentName.trim();
     const className = newAssignmentClass.trim();
@@ -31,19 +52,25 @@ export function MyAssignments() {
       return;
     }
 
-    setAssignments((currentAssignments) => [
-      ...currentAssignments,
-      {
-        id: Date.now(),
-        name,
-        className,
-        dueDate: newAssignmentDueDate,
-        completed: false,
-      },
-    ]);
-    setNewAssignmentName("");
-    setNewAssignmentClass("");
-    setNewAssignmentDueDate("");
+    try {
+      const response = await fetch("/api/assignments", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, className, dueDate: newAssignmentDueDate }),
+      });
+      if (!response.ok) {
+        throw new Error("Could not save assignment.");
+      }
+
+      const savedAssignment = await response.json();
+      setAssignments((currentAssignments) => [...currentAssignments, savedAssignment]);
+      setNewAssignmentName("");
+      setNewAssignmentClass("");
+      setNewAssignmentDueDate("");
+      setError("");
+    } catch {
+      setError("Could not save assignment. Please try again.");
+    }
   }
 
   function saveAssignment(assignmentId) {
@@ -248,6 +275,8 @@ export function MyAssignments() {
       >
         No assignments match that filter.
       </p>
+
+      {error && <p role="alert">{error}</p>}
 
       <form className="assignment-actions" onSubmit={addAssignment}>
         <input
