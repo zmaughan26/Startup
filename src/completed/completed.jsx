@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./completed.css";
 
-export function Complete () {
-    const username = localStorage.getItem("username") || "Guest";
+export function Complete ({ username }) {
     const [error, setError] = useState("");
     const [completedAssignments, setCompletedAssignments] = useState([]);
     const [isLoading, setIsLoading] = useState(true);

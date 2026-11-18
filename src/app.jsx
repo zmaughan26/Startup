@@ -107,7 +107,7 @@ export default function App() {
             <Route path="/login" element={<Login onAuthenticated={setUsername} />} />
             <Route element={<RequireAuth isLoading={!authReady} isAuthenticated={Boolean(username)} />}>
               <Route path="/about" element={<Info />} />
-              <Route path="/completed" element={<Complete />} />
+              <Route path="/completed" element={<Complete username={username} />} />
               <Route path="/myassignments" element={<MyAssignments />} />
               <Route path="*" element={<NotFound />} />
             </Route>
