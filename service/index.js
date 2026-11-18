@@ -1,58 +1,27 @@
 const crypto = require('node:crypto');
-const fs = require('node:fs');
 const path = require('node:path');
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const session = require('express-session');
-const MongoStore = require('connect-mongo').default;
-const { MongoClient, ObjectId } = require('mongodb');
+const {
+  ObjectId,
+  closeDatabase,
+  connectDatabase,
+  getDatabase,
+  respondWithDatabaseError,
+  sessionStore,
+} = require('./database');
 
 const port = process.argv.length > 2 ? process.argv[2] : 4000;
 const app = express();
 const isProduction = process.env.NODE_ENV === 'production';
 const sessionSecret = process.env.SESSION_SECRET || crypto.randomBytes(32).toString('hex');
-const databaseName = process.env.MONGODB_DATABASE || 'studytrack';
 const sessionCookieOptions = {
   httpOnly: true,
   sameSite: 'lax',
   secure: isProduction,
   path: '/',
 };
-
-function getMongoConfiguration() {
-  if (process.env.MONGODB_URI) {
-    return {
-      uri: process.env.MONGODB_URI,
-      databaseName,
-    };
-  }
-
-  const configPath = path.join(__dirname, '..', 'dbconfig.json');
-  if (!fs.existsSync(configPath)) {
-    throw new Error('Set MONGODB_URI or provide the ignored dbconfig.json file.');
-  }
-
-  const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
-  if (
-    typeof config.hostname !== 'string' ||
-    typeof config.userName !== 'string' ||
-    typeof config.password !== 'string'
-  ) {
-    throw new Error('dbconfig.json must define hostname, userName, and password.');
-  }
-
-  const connectionString = /^(mongodb|mongodb\+srv):\/\//.test(config.hostname)
-    ? config.hostname
-    : `mongodb+srv://${config.hostname}`;
-  const mongoUrl = new URL(connectionString);
-  mongoUrl.username = config.userName;
-  mongoUrl.password = config.password;
-
-  return {
-    uri: mongoUrl.toString(),
-    databaseName: process.env.MONGODB_DATABASE || config.databaseName || databaseName,
-  };
-}
 
 if (isProduction && !process.env.SESSION_SECRET) {
   throw new Error('SESSION_SECRET must be set in production.');
@@ -62,35 +31,11 @@ if (isProduction) {
   app.set('trust proxy', 1);
 }
 
-const mongoConfig = getMongoConfiguration();
-const mongoClient = new MongoClient(mongoConfig.uri, {
-  serverSelectionTimeoutMS: 10000,
-});
-const mongoClientPromise = mongoClient.connect();
-const mongoSessionStore = MongoStore.create({
-  clientPromise: mongoClientPromise,
-  dbName: mongoConfig.databaseName,
-  collectionName: 'sessions',
-  ttl: 60 * 60 * 24,
-});
-mongoSessionStore.collectionP.catch(() => {});
-const databasePromise = mongoClientPromise.then(async (client) => {
-  const database = client.db(mongoConfig.databaseName);
-  await Promise.all([
-    database.collection('users').createIndex({ usernameKey: 1 }, { unique: true }),
-    database.collection('assignments').createIndex(
-      { userId: 1, id: 1 },
-      { unique: true }
-    ),
-  ]);
-  return database;
-});
-
 app.use(express.json());
 app.use(session({
   name: 'studytrack.sid',
   secret: sessionSecret,
-  store: mongoSessionStore,
+  store: sessionStore,
   resave: false,
   saveUninitialized: false,
   cookie: {
@@ -100,22 +45,13 @@ app.use(session({
 }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-function logDatabaseError(action, error) {
-  console.error(`${action}:`, error);
-}
-
-function respondWithDatabaseError(res, action, error) {
-  logDatabaseError(action, error);
-  res.status(500).json({ error: 'A database error occurred. Please try again.' });
-}
-
 async function requireAuthentication(req, res, next) {
   if (!req.session.userId) {
     return res.status(401).json({ error: 'Please log in to continue.' });
   }
 
   try {
-    const database = await databasePromise;
+    const database = await getDatabase();
     const user = await database.collection('users').findOne(
       { usernameKey: req.session.userId },
       { projection: { username: 1 } }
@@ -166,10 +102,9 @@ app.post('/api/auth/register', async (req, res) => {
   }
 
   const usernameKey = username.trim().toLowerCase();
-  const database = await databasePromise;
-  const users = database.collection('users');
-
   try {
+    const database = await getDatabase();
+    const users = database.collection('users');
     const user = {
       username: username.trim(),
       usernameKey,
@@ -193,7 +128,7 @@ app.post('/api/auth/login', async (req, res) => {
   }
 
   try {
-    const database = await databasePromise;
+    const database = await getDatabase();
     const usernameKey = username.trim().toLowerCase();
     const user = await database.collection('users').findOne({ usernameKey });
     if (!user || !(await bcrypt.compare(password, user.passwordHash))) {
@@ -226,7 +161,7 @@ app.get('/api/auth/me', requireAuthentication, (req, res) => {
 
 app.get('/api/assignments', requireAuthentication, async (req, res) => {
   try {
-    const database = await databasePromise;
+    const database = await getDatabase();
     const completed = req.query.completed === 'true';
     const assignments = await database.collection('assignments')
       .find(
@@ -260,7 +195,7 @@ app.post('/api/assignments', requireAuthentication, async (req, res) => {
   }
 
   try {
-    const database = await databasePromise;
+    const database = await getDatabase();
     const assignment = {
       id: new ObjectId().toHexString(),
       userId: req.session.userId,
@@ -285,7 +220,7 @@ app.patch('/api/assignments/:id/completion', requireAuthentication, async (req, 
   }
 
   try {
-    const database = await databasePromise;
+    const database = await getDatabase();
     const assignments = database.collection('assignments');
     const filter = {
       userId: req.session.userId,
@@ -321,7 +256,7 @@ app.delete('/api/assignments/:id', requireAuthentication, async (req, res) => {
   }
 
   try {
-    const database = await databasePromise;
+    const database = await getDatabase();
     const result = await database.collection('assignments').deleteOne({
       userId: req.session.userId,
       id: req.params.id,
@@ -343,15 +278,15 @@ app.get('/{*path}', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-databasePromise
+connectDatabase()
   .then(() => {
     app.listen(port, () => {
-      console.log(`Connected to MongoDB database "${mongoConfig.databaseName}"`);
+      console.log('Connected to MongoDB.');
       console.log(`Listening on port ${port}`);
     });
   })
   .catch(async (error) => {
     console.error('Could not connect to MongoDB. Check your connection settings and network access.', error);
-    await mongoClient.close();
+    await closeDatabase();
     process.exitCode = 1;
   });
