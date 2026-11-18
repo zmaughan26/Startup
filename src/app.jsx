@@ -58,7 +58,6 @@ export default function App() {
         throw new Error("Could not log out. Please try again.");
       }
       localStorage.removeItem("username");
-      localStorage.removeItem("studytrack.completedAssignments");
       setUsername("");
       setAuthError("");
     } catch (error) {

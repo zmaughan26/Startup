@@ -116,8 +116,10 @@ export function MyAssignments() {
 
   async function completeAssignment(assignment) {
     try {
-      const response = await fetch(`/api/assignments/${assignment.id}`, {
-        method: "DELETE",
+      const response = await fetch(`/api/assignments/${assignment.id}/completion`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ completed: true }),
       });
       if (!response.ok) {
         throw new Error(
@@ -127,19 +129,6 @@ export function MyAssignments() {
         );
       }
 
-      const completedAssignments = JSON.parse(
-        localStorage.getItem("studytrack.completedAssignments") || "[]"
-      );
-      const remainingCompletedAssignments = completedAssignments.filter(
-        (completedAssignment) => completedAssignment.id !== assignment.id
-      );
-      localStorage.setItem(
-        "studytrack.completedAssignments",
-        JSON.stringify([
-          ...remainingCompletedAssignments,
-          { ...assignment, completed: true, completedOn: new Date().toLocaleDateString() },
-        ])
-      );
       setAssignments((currentAssignments) =>
         currentAssignments.filter((currentAssignment) => currentAssignment.id !== assignment.id)
       );

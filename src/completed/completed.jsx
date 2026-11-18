@@ -1,40 +1,71 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./completed.css";
 
 export function Complete () {
     const username = localStorage.getItem("username") || "Guest";
     const [error, setError] = useState("");
-    const [completedAssignments, setCompletedAssignments] = useState(() => {
-      const savedAssignments = localStorage.getItem("studytrack.completedAssignments");
-      return savedAssignments ? JSON.parse(savedAssignments) : [];
-    });
+    const [completedAssignments, setCompletedAssignments] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+      let ignore = false;
+
+      async function loadCompletedAssignments() {
+        try {
+          const response = await fetch("/api/assignments?completed=true");
+          if (!response.ok) {
+            throw new Error(
+              response.status === 401
+                ? "Please log in to view completed assignments."
+                : "Could not load completed assignments."
+            );
+          }
+
+          const assignments = await response.json();
+          if (!ignore) {
+            setCompletedAssignments(assignments);
+            setError("");
+          }
+        } catch (requestError) {
+          if (!ignore) {
+            setError(requestError.message || "Could not load completed assignments.");
+          }
+        } finally {
+          if (!ignore) {
+            setIsLoading(false);
+          }
+        }
+      }
+
+      loadCompletedAssignments();
+      return () => {
+        ignore = true;
+      };
+    }, []);
 
     async function reopenAssignment(assignment) {
       try {
-        const response = await fetch("/api/assignments", {
-          method: "POST",
+        const response = await fetch(`/api/assignments/${assignment.id}/completion`, {
+          method: "PATCH",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            name: assignment.name,
-            className: assignment.className,
-            dueDate: assignment.dueDate,
-          }),
+          body: JSON.stringify({ completed: false }),
         });
         if (!response.ok) {
-          throw new Error("Could not reopen assignment.");
+          throw new Error(
+            response.status === 401
+              ? "Please log in to reopen assignments."
+              : "Could not reopen assignment."
+          );
         }
 
-        const remainingAssignments = completedAssignments.filter(
-          (completedAssignment) => completedAssignment.id !== assignment.id
+        setCompletedAssignments((currentAssignments) =>
+          currentAssignments.filter(
+            (completedAssignment) => completedAssignment.id !== assignment.id
+          )
         );
-        localStorage.setItem(
-          "studytrack.completedAssignments",
-          JSON.stringify(remainingAssignments)
-        );
-        setCompletedAssignments(remainingAssignments);
         setError("");
-      } catch {
-        setError("Could not reopen assignment. Please try again.");
+      } catch (requestError) {
+        setError(requestError.message || "Could not reopen assignment. Please try again.");
       }
     }
 
@@ -63,7 +94,11 @@ export function Complete () {
               </td>
               <td data-label="Assignment">{assignment.name}</td>
               <td data-label="Class">{assignment.className}</td>
-              <td data-label="Date">{assignment.completedOn}</td>
+              <td data-label="Date">
+                {assignment.completedOn
+                  ? new Date(assignment.completedOn).toLocaleDateString()
+                  : ""}
+              </td>
               <td className="assignment-checkbox-cell" data-label="Completed">
                 <label className="completed-reopen-control">
                   <input
@@ -81,7 +116,9 @@ export function Complete () {
       </table>
       </div>
       {error && <p role="alert">{error}</p>}
-      {completedAssignments.length === 0 && <p>No completed assignments yet.</p>}
+      {!isLoading && !error && completedAssignments.length === 0 && (
+        <p>No completed assignments yet.</p>
+      )}
     </main>
     );
 }

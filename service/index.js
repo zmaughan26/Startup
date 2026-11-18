@@ -227,8 +227,15 @@ app.get('/api/auth/me', requireAuthentication, (req, res) => {
 app.get('/api/assignments', requireAuthentication, async (req, res) => {
   try {
     const database = await databasePromise;
+    const completed = req.query.completed === 'true';
     const assignments = await database.collection('assignments')
-      .find({ userId: req.session.userId }, { projection: { _id: 0, userId: 0 } })
+      .find(
+        {
+          userId: req.session.userId,
+          completed: completed ? true : { $ne: true },
+        },
+        { projection: { _id: 0, userId: 0 } }
+      )
       .sort({ _id: 1 })
       .toArray();
     res.json(assignments);
@@ -268,6 +275,43 @@ app.post('/api/assignments', requireAuthentication, async (req, res) => {
     res.status(201).json(responseAssignment);
   } catch (error) {
     respondWithDatabaseError(res, 'Saving assignment failed', error);
+  }
+});
+
+app.patch('/api/assignments/:id/completion', requireAuthentication, async (req, res) => {
+  const { completed } = req.body;
+  if (typeof completed !== 'boolean') {
+    return res.status(400).json({ error: 'Completion status must be true or false.' });
+  }
+
+  try {
+    const database = await databasePromise;
+    const assignments = database.collection('assignments');
+    const filter = {
+      userId: req.session.userId,
+      id: req.params.id,
+    };
+    const update = completed
+      ? {
+          $set: { completed: true, completedOn: new Date().toISOString() },
+        }
+      : {
+          $set: { completed: false },
+          $unset: { completedOn: '' },
+        };
+    const result = await assignments.updateOne(filter, update);
+
+    if (result.matchedCount === 0) {
+      return res.status(404).json({ error: 'Assignment not found.' });
+    }
+
+    const assignment = await assignments.findOne(
+      filter,
+      { projection: { _id: 0, userId: 0 } }
+    );
+    res.json(assignment);
+  } catch (error) {
+    respondWithDatabaseError(res, 'Updating assignment completion failed', error);
   }
 });
 
