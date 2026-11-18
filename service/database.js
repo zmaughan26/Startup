@@ -13,6 +13,10 @@ function getMongoConfiguration() {
     };
   }
 
+  if (process.env.NODE_ENV === 'production') {
+    throw new Error('MONGODB_URI must be set in production.');
+  }
+
   const configPath = path.join(__dirname, '..', 'dbconfig.json');
   if (!fs.existsSync(configPath)) {
     throw new Error('Set MONGODB_URI or provide the ignored dbconfig.json file.');
