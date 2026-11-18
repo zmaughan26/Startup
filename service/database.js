@@ -59,12 +59,15 @@ sessionStore.collectionP.catch(() => {});
 
 const databasePromise = mongoClientPromise.then(async (client) => {
   const database = client.db(mongoConfig.databaseName);
+  const assignments = database.collection('assignments');
+  const indexes = await assignments.listIndexes().toArray();
+  if (indexes.some((index) => index.name === 'userId_1_id_1')) {
+    await assignments.dropIndex('userId_1_id_1');
+  }
+
   await Promise.all([
     database.collection('users').createIndex({ usernameKey: 1 }, { unique: true }),
-    database.collection('assignments').createIndex(
-      { userId: 1, id: 1 },
-      { unique: true }
-    ),
+    assignments.createIndex({ userId: 1, completed: 1, dueDate: 1 }),
   ]);
   return database;
 });

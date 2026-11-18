@@ -169,11 +169,14 @@ app.get('/api/assignments', requireAuthentication, async (req, res) => {
           userId: req.session.userId,
           completed: completed ? true : { $ne: true },
         },
-        { projection: { _id: 0, userId: 0 } }
+        { projection: { userId: 0 } }
       )
       .sort({ _id: 1 })
       .toArray();
-    res.json(assignments);
+    res.json(assignments.map(({ _id, id, ...assignment }) => ({
+      ...assignment,
+      id: id || _id.toHexString(),
+    })));
   } catch (error) {
     respondWithDatabaseError(res, 'Loading assignments failed', error);
   }
@@ -197,7 +200,6 @@ app.post('/api/assignments', requireAuthentication, async (req, res) => {
   try {
     const database = await getDatabase();
     const assignment = {
-      id: new ObjectId().toHexString(),
       userId: req.session.userId,
       name: name.trim(),
       className: className.trim(),
@@ -205,8 +207,9 @@ app.post('/api/assignments', requireAuthentication, async (req, res) => {
       completed: false,
     };
 
-    await database.collection('assignments').insertOne(assignment);
+    const { insertedId } = await database.collection('assignments').insertOne(assignment);
     const { userId, ...responseAssignment } = assignment;
+    responseAssignment.id = insertedId.toHexString();
     res.status(201).json(responseAssignment);
   } catch (error) {
     respondWithDatabaseError(res, 'Saving assignment failed', error);
@@ -218,13 +221,19 @@ app.patch('/api/assignments/:id/completion', requireAuthentication, async (req, 
   if (typeof completed !== 'boolean') {
     return res.status(400).json({ error: 'Completion status must be true or false.' });
   }
+  if (!ObjectId.isValid(req.params.id)) {
+    return res.status(404).json({ error: 'Assignment not found.' });
+  }
 
   try {
     const database = await getDatabase();
     const assignments = database.collection('assignments');
     const filter = {
       userId: req.session.userId,
-      id: req.params.id,
+      $or: [
+        { _id: new ObjectId(req.params.id) },
+        { id: req.params.id },
+      ],
     };
     const update = completed
       ? {
@@ -242,9 +251,13 @@ app.patch('/api/assignments/:id/completion', requireAuthentication, async (req, 
 
     const assignment = await assignments.findOne(
       filter,
-      { projection: { _id: 0, userId: 0 } }
+      { projection: { userId: 0 } }
     );
-    res.json(assignment);
+    const { _id, id, ...responseAssignment } = assignment;
+    res.json({
+      ...responseAssignment,
+      id: id || _id.toHexString(),
+    });
   } catch (error) {
     respondWithDatabaseError(res, 'Updating assignment completion failed', error);
   }
@@ -259,7 +272,10 @@ app.delete('/api/assignments/:id', requireAuthentication, async (req, res) => {
     const database = await getDatabase();
     const result = await database.collection('assignments').deleteOne({
       userId: req.session.userId,
-      id: req.params.id,
+      $or: [
+        { _id: new ObjectId(req.params.id) },
+        { id: req.params.id },
+      ],
     });
     if (result.deletedCount === 0) {
       return res.status(404).json({ error: 'Assignment not found.' });
