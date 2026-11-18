@@ -12,7 +12,9 @@
   "type": "commonjs",
   "dependencies": {
     "bcryptjs": "^3.0.2",
+    "connect-mongo": "^6.0.0",
     "express": "^5.3.0",
-    "express-session": "^1.18.2"
+    "express-session": "^1.18.2",
+    "mongodb": "^7.9.0"
   }
 }
