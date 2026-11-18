@@ -29,6 +29,11 @@ export function Login({ onAuthenticated }) {
           }),
         }
       );
+      if (!response.headers.get("content-type")?.includes("json")) {
+        throw new Error(
+          "The server returned a web page instead of an API response. Deploy the backend and route production /api requests to it."
+        );
+      }
       const result = await response.json();
       if (!response.ok) {
         throw new Error(result.error || "Authentication failed. Please try again.");
