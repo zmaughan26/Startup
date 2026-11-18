@@ -111,18 +111,18 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 - [x] **Node.js/Express HTTP service** - Built an Express server in `service/index.js` that listens on port 4000.
 - [x] **Static middleware for frontend** - Added Express static middleware to serve files from the `public` directory.
 - [x] **Calls to third party endpoints** - The assignments page fetches and displays a quote from the DummyJSON Quotes API.
-- [x] **Backend service endpoints** - Added endpoints to list, add, and delete assignments; assignment data is currently stored in memory.
+- [x] **Backend service endpoints** - Added endpoints to list, add, complete, reopen, and delete assignments; assignment data is stored in MongoDB.
 - [x] **Frontend calls service endpoints** - The assignments page uses `fetch` to load, create, complete, delete, and reopen assignments through the service API.
-- [x] **Supports registration, login, logout, and restricted endpoint** - Added account registration and login with server-side sessions, a logout action, and assignment API routes that require an authenticated session. User accounts and assignments currently live in memory.
-- [x] **Uses BCrypt to hash passwords** - Passwords are hashed with `bcryptjs` before being stored; only the hash is kept in the in-memory user list.
+- [x] **Supports registration, login, logout, and restricted endpoint** - Added account registration and login with server-side sessions, a logout action, and assignment API routes that require an authenticated session. User accounts, assignments, and sessions are stored in MongoDB.
+- [x] **Uses BCrypt to hash passwords** - Passwords are hashed with `bcryptjs` before their hashes are stored in MongoDB.
 
 ## 🚀 DB deliverable
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] I completed the prerequisites for this deliverable (Simon deployed, GitHub link, Git commits)
-- [ ] **Stores data in MongoDB** - I did not complete this part of the deliverable.
-- [ ] **Stores credentials in MongoDB** - I did not complete this part of the deliverable.
+- [x] I completed the prerequisites for this deliverable (Simon deployed, GitHub link, Git commits)
+- [x] **Stores data in MongoDB** - The backend connects to the `studytrack` MongoDB database. Assignments are persisted per user, including completion status and completion date. MongoDB connection setup and helpers are in `service/database.js`.
+- [x] **Stores credentials in MongoDB** - User accounts are stored in MongoDB; passwords are hashed with BCrypt (`bcryptjs`) before storage. Login sessions are also persisted in MongoDB.
 
 ## 🚀 WebSocket deliverable
 
