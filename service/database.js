@@ -1,94 +1,50 @@
-const fs = require('node:fs');
-const path = require('node:path');
-const MongoStore = require('connect-mongo').default;
-const { MongoClient, ObjectId } = require('mongodb');
+const { MongoClient } = require('mongodb');
+const config = require('./dbConfig.json');
 
-const databaseName = process.env.MONGODB_DATABASE || 'studytrack';
+const url = `mongodb+srv://${config.userName}:${config.password}@${config.hostname}`;
 
-function getMongoConfiguration() {
-  if (process.env.MONGODB_URI) {
-    return {
-      uri: process.env.MONGODB_URI,
-      databaseName,
+// Connect to the database cluster
+const client = new MongoClient(url);
+const db = client.db('studytrack');
+const collection = db.collection('assignments');
+
+async function main() {
+  try {
+    // Test that you can connect to the database
+    await db.command({ ping: 1 });
+    console.log(`DB connected to ${config.hostname}`);
+  } catch (ex) {
+    console.log(`Connection failed to ${url} because ${ex.message}`);
+    process.exit(1);
+  }
+
+  try {
+    // Insert a document
+    const house = {
+      name: 'Beachfront views',
+      summary: 'From your bedroom to the beach, no shoes required',
+      property_type: 'Condo',
+      beds: 1,
     };
+    await collection.insertOne(house);
+
+    // Query the documents
+    const query = { property_type: 'Condo', beds: { $lt: 2 } };
+    const options = {
+      sort: { name: -1 },
+      limit: 10,
+    };
+    const cursor = collection.find(query, options);
+    const rentals = await cursor.toArray();
+    rentals.forEach((i) => console.log(i));
+
+    // Delete documents
+    await collection.deleteMany(query);
+  } catch (ex) {
+    console.log(`Database (${url}) error: ${ex.message}`);
+  } finally {
+    await client.close();
   }
-
-  if (process.env.NODE_ENV === 'production') {
-    throw new Error('MONGODB_URI must be set in production.');
-  }
-
-  const configPath = path.join(__dirname, '..', 'dbconfig.json');
-  if (!fs.existsSync(configPath)) {
-    throw new Error('Set MONGODB_URI or provide the ignored dbconfig.json file.');
-  }
-
-  const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
-  if (
-    typeof config.hostname !== 'string' ||
-    typeof config.userName !== 'string' ||
-    typeof config.password !== 'string'
-  ) {
-    throw new Error('dbconfig.json must define hostname, userName, and password.');
-  }
-
-  const uri = `mongodb+srv://${encodeURIComponent(config.userName)}:${encodeURIComponent(config.password)}@${config.hostname}`;
-
-  return {
-    uri,
-    databaseName: process.env.MONGODB_DATABASE || config.databaseName || databaseName,
-  };
 }
 
-const mongoConfig = getMongoConfiguration();
-const mongoClient = new MongoClient(mongoConfig.uri, {
-  serverSelectionTimeoutMS: 10000,
-});
-const mongoClientPromise = mongoClient.connect();
-const sessionStore = MongoStore.create({
-  clientPromise: mongoClientPromise,
-  dbName: mongoConfig.databaseName,
-  collectionName: 'sessions',
-  ttl: 60 * 60 * 24,
-});
-sessionStore.collectionP.catch(() => {});
-
-const databasePromise = mongoClientPromise.then(async (client) => {
-  const database = client.db(mongoConfig.databaseName);
-  const assignments = database.collection('assignments');
-  const indexes = await assignments.listIndexes().toArray();
-  if (indexes.some((index) => index.name === 'userId_1_id_1')) {
-    await assignments.dropIndex('userId_1_id_1');
-  }
-
-  await Promise.all([
-    database.collection('users').createIndex({ usernameKey: 1 }, { unique: true }),
-    assignments.createIndex({ userId: 1, completed: 1, dueDate: 1 }),
-  ]);
-  return database;
-});
-
-function getDatabase() {
-  return databasePromise;
-}
-
-function connectDatabase() {
-  return databasePromise;
-}
-
-function closeDatabase() {
-  return mongoClient.close();
-}
-
-function respondWithDatabaseError(res, action, error) {
-  console.error(`${action}:`, error);
-  res.status(500).json({ error: 'A database error occurred. Please try again.' });
-}
-
-module.exports = {
-  ObjectId,
-  closeDatabase,
-  connectDatabase,
-  getDatabase,
-  respondWithDatabaseError,
-  sessionStore,
-};
+main();
