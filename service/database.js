@@ -31,15 +31,10 @@ function getMongoConfiguration() {
     throw new Error('dbconfig.json must define hostname, userName, and password.');
   }
 
-  const connectionString = /^(mongodb|mongodb\+srv):\/\//.test(config.hostname)
-    ? config.hostname
-    : `mongodb+srv://${config.hostname}`;
-  const mongoUrl = new URL(connectionString);
-  mongoUrl.username = config.userName;
-  mongoUrl.password = config.password;
+  const uri = `mongodb+srv://${encodeURIComponent(config.userName)}:${encodeURIComponent(config.password)}@${config.hostname}`;
 
   return {
-    uri: mongoUrl.toString(),
+    uri,
     databaseName: process.env.MONGODB_DATABASE || config.databaseName || databaseName,
   };
 }
