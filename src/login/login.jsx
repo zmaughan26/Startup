@@ -41,7 +41,7 @@ export function Login({ onAuthenticated }) {
 
       localStorage.setItem("username", result.username);
       onAuthenticated(result.username);
-      navigate("/myassignments");
+      navigate("/home");
     } catch (requestError) {
       setError(
         requestError.name === "AbortError"

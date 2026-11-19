@@ -3,6 +3,12 @@
 .body {
 	font-family: Arial, sans-serif;
 	margin: 0;
+	background: #f8fafc;
+}
+
+.app-content {
+	min-height: 60vh;
+	background: #f8fafc;
 }
 
 header {
@@ -131,6 +137,26 @@ main {
 	padding: 0 12px;
 }
 
+.assignments-main,
+.completed-main,
+.about-main {
+	padding: 28px;
+	border: 1px solid #edf0f4;
+	border-radius: 12px;
+	background: #fff;
+	box-shadow: 0 8px 22px rgba(18, 52, 90, 0.07);
+}
+
+.users {
+	color: #64748b;
+	font-size: 0.78rem;
+	font-weight: 700;
+}
+
+.users span {
+	color: #12345a;
+}
+
 main h1 {
 	text-align: center;
 }
@@ -153,6 +179,9 @@ main h1 {
 	margin: 24px 0;
 	border-collapse: collapse;
 	text-align: left;
+	overflow: hidden;
+	border: 1px solid #edf0f4;
+	border-radius: 10px;
 }
 
 .assignment-table-toolbar {
@@ -188,7 +217,7 @@ main h1 {
 }
 
 .assignment-filter input:focus-visible {
-	outline: 3px solid #f4b942;
+	outline: 3px solid #dbe8f5;
 	outline-offset: 2px;
 }
 
@@ -212,12 +241,16 @@ main h1 {
 .assignment-table th,
 .assignment-table td {
 	padding: 12px 14px;
-	border-bottom: 1px solid #d4dce6;
+	border-bottom: 1px solid #edf0f4;
 }
 
 .assignment-table th {
 	background: #e8f0f8;
 	color: #12345a;
+}
+
+.assignment-table tbody tr:hover {
+	background: #f7faff;
 }
 
 .assignment-checkbox-heading,
@@ -240,21 +273,21 @@ main h1 {
 	width: 18px;
 	height: 18px;
 	margin: 0;
-	accent-color: #276738;
+	accent-color: #2563a6;
 	vertical-align: middle;
 	cursor: pointer;
 }
 
 .completed-table tbody tr {
-	background: #e8f5e9;
+	background: #eef5fb;
 }
 
 .completed-table tbody tr:hover {
-	background: #d9eedc;
+	background: #e3eef8;
 }
 
 .completed-table tbody td:first-child {
-	color: #276738;
+	color: #12345a;
 	font-weight: 600;
 }
 
@@ -266,7 +299,7 @@ main h1 {
 }
 
 .assignment-actions input:focus-visible {
-	outline: 3px solid #f4b942;
+	outline: 3px solid #dbe8f5;
 	outline-offset: 2px;
 }
 

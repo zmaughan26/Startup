@@ -32,11 +32,11 @@
 }
 
 .login-submit:focus-visible {
-	outline: 3px solid #f4b942;
+	outline: 3px solid #dbe8f5;
 	outline-offset: 2px;
 }
 
 .login-create:focus-visible {
-	outline: 3px solid #f4b942;
+	outline: 3px solid #dbe8f5;
 	outline-offset: 2px;
 }

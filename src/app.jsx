@@ -7,6 +7,7 @@ import { Login } from "./login/login.jsx";
 import { Info } from "./about/about.jsx";
 import { Complete } from "./completed/completed.jsx";
 import { MyAssignments } from "./myassignments/myassignments.jsx";
+import { Home } from "./home/home.jsx";
 
 
 export default function App() {
@@ -72,10 +73,17 @@ export default function App() {
           <h1>StudyTrack<sup>&reg;</sup></h1>
           <nav className="header-nav" aria-label="Main navigation">
             <ul>
-              <li><NavLink to="/login">Login</NavLink></li>
               {username && (
                 <li>
-                  <NavLink to="/myassignments">My Assignments</NavLink>
+                  <NavLink to="/home">Home</NavLink>
+                </li>
+              )}
+              {!username && authReady && (
+                <li><NavLink to="/login">Login</NavLink></li>
+              )}
+              {username && (
+                <li>
+                  <NavLink to="/myassignments">Calendar</NavLink>
                 </li>
               )}
               {username && (
@@ -103,9 +111,10 @@ export default function App() {
 
         <div className="app-content">
           <Routes>
-            <Route path="/" element={<Login onAuthenticated={setUsername} />} />
+            <Route path="/" element={<Navigate to={username ? "/home" : "/login"} replace />} />
             <Route path="/login" element={<Login onAuthenticated={setUsername} />} />
             <Route element={<RequireAuth isLoading={!authReady} isAuthenticated={Boolean(username)} />}>
+              <Route path="/home" element={<Home username={username} />} />
               <Route path="/about" element={<Info />} />
               <Route path="/completed" element={<Complete username={username} />} />
               <Route path="/myassignments" element={<MyAssignments />} />

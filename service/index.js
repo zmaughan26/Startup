@@ -216,6 +216,60 @@ app.post('/api/assignments', requireAuthentication, async (req, res) => {
   }
 });
 
+app.patch('/api/assignments/:id', requireAuthentication, async (req, res) => {
+  const { name, className, dueDate } = req.body;
+  if (
+    typeof name !== 'string' ||
+    !name.trim() ||
+    typeof className !== 'string' ||
+    !className.trim() ||
+    typeof dueDate !== 'string' ||
+    !dueDate.trim()
+  ) {
+    return res.status(400).json({
+      error: 'Name, class, and due date are required.',
+    });
+  }
+  if (!ObjectId.isValid(req.params.id)) {
+    return res.status(404).json({ error: 'Assignment not found.' });
+  }
+
+  try {
+    const database = await getDatabase();
+    const assignments = database.collection('assignments');
+    const filter = {
+      userId: req.session.userId,
+      $or: [
+        { _id: new ObjectId(req.params.id) },
+        { id: req.params.id },
+      ],
+    };
+    const result = await assignments.updateOne(filter, {
+      $set: {
+        name: name.trim(),
+        className: className.trim(),
+        dueDate: dueDate.trim(),
+      },
+    });
+
+    if (result.matchedCount === 0) {
+      return res.status(404).json({ error: 'Assignment not found.' });
+    }
+
+    const assignment = await assignments.findOne(
+      filter,
+      { projection: { userId: 0 } }
+    );
+    const { _id, id, ...responseAssignment } = assignment;
+    res.json({
+      ...responseAssignment,
+      id: id || _id.toHexString(),
+    });
+  } catch (error) {
+    respondWithDatabaseError(res, 'Updating assignment failed', error);
+  }
+});
+
 app.patch('/api/assignments/:id/completion', requireAuthentication, async (req, res) => {
   const { completed } = req.body;
   if (typeof completed !== 'boolean') {

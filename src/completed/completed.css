@@ -49,15 +49,15 @@
 }
 
 .completed-table tbody tr {
-	background: #f3faf4;
+	background: #f8fafc;
 }
 
 .completed-table tbody tr:hover {
-	background: #e8f5e9;
+	background: #eef5fb;
 }
 
 .completed-table tbody td:first-child {
-	color: #276738;
+	color: #12345a;
 	font-weight: 600;
 }
 
@@ -65,8 +65,8 @@
 	display: inline-block;
 	padding: 4px 10px;
 	border-radius: 999px;
-	background: #d9eedc;
-	color: #276738;
+	background: #dbe8f5;
+	color: #12345a;
 	font-size: 0.88rem;
 	font-weight: 700;
 }
@@ -116,7 +116,7 @@
 		display: grid;
 		grid-template-columns: repeat(2, minmax(0, 1fr));
 		overflow: hidden;
-		border: 1px solid #d5e2d7;
+		border: 1px solid #dbe8f5;
 		border-radius: 14px;
 		background: #fff;
 		box-shadow: 0 4px 14px rgba(18, 52, 90, 0.08);
@@ -150,7 +150,7 @@
 		align-items: center;
 		justify-content: space-between;
 		padding: 12px 15px;
-		background: #f3faf4;
+		background: #eaf2f9;
 		white-space: normal;
 	}
 
